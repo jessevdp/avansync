@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: install Asio
-        run: sudo apt-get install libasio-dev
+        run: sudo apt-get install libasio-dev=1:1.12.2-1
 
       - name: configure
         run: cmake -B build/
@@ -33,7 +33,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: install Asio
-        run: sudo apt-get install libasio-dev
+        run: sudo apt-get install libasio-dev=1:1.12.2-1
 
       - name: configure
         run: cmake -B build/
