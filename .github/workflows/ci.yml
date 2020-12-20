@@ -37,7 +37,7 @@ jobs:
       - run: sudo apt-get update
 
       - name: install Asio
-        run: sudo apt-get install libasio-dev=1:1.12.2-1
+        run: sudo apt-get install libasio-dev=1.12.2-1
 
       - name: configure
         run: cmake -B build/
