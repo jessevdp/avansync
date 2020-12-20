@@ -8,6 +8,7 @@ target_include_directories(server-lib
 
 find_package(Asio REQUIRED)
 include_directories(${ASIO_INCLUDE_DIR})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DASIO_STANDALONE=YES")
 
 add_executable(server main.cpp)
 target_link_libraries(server
