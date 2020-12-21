@@ -6,12 +6,16 @@
 
 using namespace avansync::server;
 
-int main() {
-  try {
+int main()
+{
+  try
+  {
     const int server_port {12345};
     Server server {server_port};
     server.start();
-  } catch (const std::exception& ex) {
+  }
+  catch (const std::exception& ex)
+  {
     std::cerr << "server: " << ex.what() << '\n';
     return EXIT_FAILURE;
   }

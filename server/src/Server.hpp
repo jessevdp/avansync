@@ -2,12 +2,14 @@
 
 #include <asio.hpp>
 #include <iostream>
-#include <string>
 #include <memory>
+#include <string>
 
-namespace avansync::server {
+namespace avansync::server
+{
 
-  class Server {
+  class Server
+  {
   private:
     inline static const char* lf {"\n"};
     inline static const char* crlf {"\r\n"};
@@ -27,7 +29,7 @@ namespace avansync::server {
     std::unique_ptr<asio::ip::tcp::iostream> accept_client_connection();
     void on_connect(asio::ip::tcp::iostream& client) const;
     std::string parse_request(asio::ip::tcp::iostream& client) const;
-    void handle_request(std::string request, asio::ip::tcp::iostream& client);
+    void handle_request(std::string& request, asio::ip::tcp::iostream& client);
   };
 
-}
+} // namespace avansync::server

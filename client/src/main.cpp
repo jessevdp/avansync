@@ -4,8 +4,10 @@
 #include <stdexcept>
 #include <string>
 
-int main() {
-  try {
+int main()
+{
+  try
+  {
     const char* server_address {"localhost"};
     const char* server_port {"12345"};
     const char* prompt {"avansync> "};
@@ -15,9 +17,11 @@ int main() {
     asio::ip::tcp::iostream server {server_address, server_port};
     if (!server) throw std::runtime_error("could not connect to server");
 
-    while (server) {
+    while (server)
+    {
       std::string resp;
-      if (getline(server, resp)) {
+      if (getline(server, resp))
+      {
         resp.erase(resp.end() - 1); // remove '\r'
         std::cout << resp << lf;
         if (resp == "Bye.") break;
@@ -27,8 +31,9 @@ int main() {
         if (getline(std::cin, req)) { server << req << crlf; }
       }
     }
-
-  } catch (const std::exception& ex) {
+  }
+  catch (const std::exception& ex)
+  {
     std::cerr << "client: " << ex.what() << '\n';
     return EXIT_FAILURE;
   }
