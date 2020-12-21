@@ -9,7 +9,7 @@ find_package(Threads REQUIRED)
 find_package(Asio REQUIRED)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DASIO_STANDALONE=YES")
-include_directories(${ASIO_INCLUDE_DIRS}))
+include_directories(${ASIO_INCLUDE_DIRS})
 
 add_executable(server main.cpp)
 target_link_libraries(server
