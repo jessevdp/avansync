@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  server:
+    name: Server
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: configure
+        run: cmake -B build/
+
+      - name: build
+        run: cmake --build build/ --target server
+
+  client:
+    name: Client
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: configure
+        run: cmake -B build/
+
+      - name: build
+        run: cmake --build build/ --target client
+
+  code-formatting:
+    name: Code formatting
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: DoozyX/clang-format-lint-action@master
+      with:
+        exclude: './vendor'
+        clangFormatVersion: 11
+        inplace: true
+
+    - uses: EndBug/add-and-commit@v4
+      with:
+        author_name: ClangFormat robot
+        author_email: clang-format-robot@example.com
+        message: '🎨 Format code using ClangFormat'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
