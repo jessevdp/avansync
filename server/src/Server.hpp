@@ -16,6 +16,8 @@ namespace avansync::server
     inline static const char* lf {"\n"};
     inline static const char* crlf {"\r\n"};
 
+    std::string _base_dir_path;
+
     asio::io_context _io_context;
     asio::ip::tcp::acceptor _server;
     bool _running {false};
@@ -26,7 +28,7 @@ namespace avansync::server
     std::unique_ptr<handler::RequestHandlerChain> _handlers;
 
   public:
-    explicit Server(int port);
+    explicit Server(int port, std::string base_dir_path);
     void start();
     void stop();
 
@@ -37,6 +39,8 @@ namespace avansync::server
 
     void log(const std::string& string) const override;
     [[nodiscard]] std::basic_ostream<char>& log() const override;
+
+    [[nodiscard]] std::string base_dir_path() const override;
 
     //#endregion
 

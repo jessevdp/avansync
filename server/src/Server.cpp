@@ -13,8 +13,9 @@ using namespace avansync::server::handler;
 namespace avansync::server
 {
 
-  Server::Server(int port) :
-      _server {_io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)},
+  Server::Server(int port, std::string base_dir_path) :
+      _base_dir_path {std::move(base_dir_path)}, _server {_io_context,
+                                                          asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)},
       _handlers {std::make_unique<RequestHandlerChain>()}
   {
     _handlers->add(std::make_unique<CommandRequestHandler>("info", std::make_unique<InfoCommand>()));
@@ -77,6 +78,8 @@ namespace avansync::server
 
   void Server::log(const std::string& string) const { log() << string; }
   std::basic_ostream<char>& Server::log() const { return std::cerr; }
+
+  std::string Server::base_dir_path() const { return _base_dir_path; }
 
   //#endregion
 

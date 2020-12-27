@@ -18,6 +18,8 @@ namespace avansync::server
 
     virtual void log(const std::string&) const = 0;
     [[nodiscard]] virtual std::basic_ostream<char>& log() const = 0;
+
+    [[nodiscard]] virtual std::string base_dir_path() const = 0;
   };
 
 } // namespace avansync::server
