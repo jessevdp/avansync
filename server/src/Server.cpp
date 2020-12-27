@@ -2,16 +2,24 @@
 
 #include "command/InfoCommand.hpp"
 #include "command/QuitCommand.hpp"
+#include "handler/CommandRequestHandler.hpp"
 
 #include <algorithm>
 #include <iostream>
 
 using namespace avansync::server::command;
+using namespace avansync::server::handler;
 
 namespace avansync::server
 {
 
-  Server::Server(int port) : _server {_io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)} {}
+  Server::Server(int port) :
+      _server {_io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)},
+      _handlers {std::make_unique<RequestHandlerChain>()}
+  {
+    _handlers->add(std::make_unique<CommandRequestHandler>("info", std::make_unique<InfoCommand>()));
+    _handlers->add(std::make_unique<CommandRequestHandler>("quit", std::make_unique<QuitCommand>()));
+  }
 
   void Server::start()
   {
@@ -48,21 +56,8 @@ namespace avansync::server
     log() << "client says: " << request.to_line() << lf;
     log() << request.to_string() << lf;
 
-    // TODO: clean up with handler chain
-    if (request.command() == "info")
-    {
-      auto command = InfoCommand {};
-      command.execute(*this, request.args());
-    }
-    else if (request.command() == "quit")
-    {
-      QuitCommand command;
-      command.execute(*this, request.args());
-    }
-    else
-    {
-      client() << request.to_line() << crlf; // simply echo the request
-    }
+    bool handled = _handlers->handle(request, *this);
+    if (!handled) client() << request.to_line() << crlf; // simply echo the request
   }
 
   std::unique_ptr<Request> Server::read_request() const

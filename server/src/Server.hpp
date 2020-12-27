@@ -2,6 +2,7 @@
 
 #include "Context.hpp"
 #include "Request.hpp"
+#include "handler/RequestHandlerChain.hpp"
 
 #include <asio.hpp>
 #include <memory>
@@ -22,6 +23,8 @@ namespace avansync::server
     bool _connected {false};
 
     std::unique_ptr<asio::ip::tcp::iostream> _client {nullptr};
+
+    std::unique_ptr<handler::RequestHandlerChain> _handlers;
 
   public:
     explicit Server(int port);
