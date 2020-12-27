@@ -28,4 +28,4 @@ namespace avansync::server
     [[nodiscard]] std::string to_line() const;
   };
 
-}
+} // namespace avansync::server

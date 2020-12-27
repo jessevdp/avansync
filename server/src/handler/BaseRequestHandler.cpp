@@ -10,9 +10,6 @@ namespace avansync::server::handler
     return false;
   }
 
-  void BaseRequestHandler::link_next(std::unique_ptr<RequestHandler> next)
-  {
-    _next = std::move(next);
-  }
+  void BaseRequestHandler::link_next(std::unique_ptr<RequestHandler> next) { _next = std::move(next); }
 
 } // namespace avansync::server::handler

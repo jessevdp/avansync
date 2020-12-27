@@ -6,7 +6,9 @@
 namespace avansync::server
 {
 
-  Request::Request(std::string command, std::vector<std::string> args) : _command {std::move(command)}, _args {std::move(args)} {}
+  Request::Request(std::string command, std::vector<std::string> args) :
+      _command {std::move(command)}, _args {std::move(args)}
+  {}
 
   Request::Request(const std::string& line)
   {
@@ -31,7 +33,8 @@ namespace avansync::server
     if (!_args.empty())
     {
       std::string args;
-      for (const auto& arg : _args) args += " " + arg;
+      for (const auto& arg : _args)
+        args += " " + arg;
       s += ", args:" + args;
     }
 
@@ -44,7 +47,8 @@ namespace avansync::server
   {
     std::string line;
     line += command();
-    for (const auto& arg : args()) line += " " + arg;
+    for (const auto& arg : args())
+      line += " " + arg;
     return line;
   }
 

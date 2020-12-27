@@ -8,7 +8,7 @@ namespace avansync::server::handler
   class BaseRequestHandler : public RequestHandler
   {
   private:
-    std::unique_ptr<RequestHandler> _next { nullptr };
+    std::unique_ptr<RequestHandler> _next {nullptr};
 
   public:
     ~BaseRequestHandler() noexcept override = default;

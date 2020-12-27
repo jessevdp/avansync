@@ -8,7 +8,8 @@
 namespace avansync::server::handler
 {
 
-  class RequestHandler {
+  class RequestHandler
+  {
   public:
     virtual ~RequestHandler() noexcept = default;
 
@@ -16,4 +17,4 @@ namespace avansync::server::handler
     virtual void link_next(std::unique_ptr<RequestHandler> next) = 0;
   };
 
-}
+} // namespace avansync::server::handler

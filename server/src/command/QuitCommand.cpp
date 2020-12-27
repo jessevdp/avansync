@@ -1,6 +1,7 @@
 #include "QuitCommand.hpp"
 
-namespace avansync::server::command {
+namespace avansync::server::command
+{
 
   void QuitCommand::execute(Context& context, std::vector<std::string> args) const
   {
@@ -9,4 +10,4 @@ namespace avansync::server::command {
     context.disconnect_current_client();
   }
 
-}
+} // namespace avansync::server::command

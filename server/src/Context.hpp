@@ -1,8 +1,8 @@
 #pragma once
 
 #include <asio.hpp>
-#include <string>
 #include <iostream>
+#include <string>
 
 namespace avansync::server
 {

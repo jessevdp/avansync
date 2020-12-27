@@ -18,4 +18,4 @@ namespace avansync::server::handler
     bool handle(const Request&, Context&) const;
   };
 
-}
+} // namespace avansync::server::handler
