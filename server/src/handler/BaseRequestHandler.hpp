@@ -12,11 +12,11 @@ namespace avansync::server::handler
 
   public:
     ~BaseRequestHandler() noexcept override = default;
-    bool handle(const Request&, Context&) const override;
+    bool handle(const std::string&, Context&) const override;
     void link_next(std::unique_ptr<RequestHandler> next) override;
 
   protected:
-    virtual bool do_handle(const Request&, Context&) const = 0;
+    virtual bool do_handle(const std::string&, Context&) const = 0;
   };
 
 } // namespace avansync::server::handler

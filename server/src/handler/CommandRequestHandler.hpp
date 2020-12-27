@@ -18,7 +18,7 @@ namespace avansync::server::handler
     CommandRequestHandler(std::string name, std::unique_ptr<command::Command> command);
 
   protected:
-    bool do_handle(const Request& request, Context& context) const override;
+    bool do_handle(const std::string& request, Context& context) const override;
   };
 
 } // namespace avansync::server::handler

@@ -9,11 +9,11 @@ namespace avansync::server::handler
       _name {std::move(name)}, _command {std::move(command)}
   {}
 
-  bool CommandRequestHandler::do_handle(const Request& request, Context& context) const
+  bool CommandRequestHandler::do_handle(const std::string& request, Context& context) const
   {
-    if (_name == request.command())
+    if (_name == request)
     {
-      _command->execute(context, request.args());
+      _command->execute(context);
       return true;
     }
     return false;

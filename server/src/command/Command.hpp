@@ -17,7 +17,7 @@ namespace avansync::server::command
   public:
     virtual ~Command() noexcept = default;
 
-    virtual void execute(Context& context, std::vector<std::string> args) const = 0;
+    virtual void execute(Context& context) const = 0;
   };
 
 } // namespace avansync::server::command

@@ -33,7 +33,7 @@ namespace avansync::server
       while (_connected)
       {
         auto request = read_request();
-        handle_request(*request);
+        handle_request(request);
       }
     }
   }
@@ -51,21 +51,20 @@ namespace avansync::server
     client() << "Welcome to AvanSync server 1.0" << crlf;
   }
 
-  void Server::handle_request(const Request& request)
+  void Server::handle_request(const std::string& request)
   {
-    log() << "client says: " << request.to_line() << lf;
-    log() << request.to_string() << lf;
+    log() << "client says: " << request << lf;
 
     bool handled = _handlers->handle(request, *this);
-    if (!handled) client() << request.to_line() << crlf; // simply echo the request
+    if (!handled) client() << request << crlf; // simply echo the request
   }
 
-  std::unique_ptr<Request> Server::read_request() const
+  std::string Server::read_request() const
   {
     std::string request;
     getline(*_client, request);
     request.erase(request.end() - 1); // remove '\r'
-    return std::make_unique<Request>(request);
+    return request;
   }
 
   void Server::stop() { _running = false; }

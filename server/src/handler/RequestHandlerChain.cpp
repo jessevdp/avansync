@@ -16,7 +16,7 @@ namespace avansync::server::handler
     _last = handler_raw;
   }
 
-  bool RequestHandlerChain::handle(const Request& request, Context& context) const
+  bool RequestHandlerChain::handle(const std::string& request, Context& context) const
   {
     if (_first) return _first->handle(request, context);
     return false;

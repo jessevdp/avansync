@@ -3,7 +3,7 @@
 namespace avansync::server::handler
 {
 
-  bool BaseRequestHandler::handle(const Request& request, Context& context) const
+  bool BaseRequestHandler::handle(const std::string& request, Context& context) const
   {
     if (do_handle(request, context)) return true;
     if (_next) return _next->handle(request, context);

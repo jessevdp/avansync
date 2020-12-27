@@ -15,7 +15,7 @@ namespace avansync::server::handler
 
   public:
     void add(std::unique_ptr<RequestHandler> handler);
-    bool handle(const Request&, Context&) const;
+    bool handle(const std::string&, Context&) const;
   };
 
 } // namespace avansync::server::handler

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Context.hpp"
-#include "Request.hpp"
 #include "handler/RequestHandlerChain.hpp"
 
 #include <asio.hpp>
@@ -45,8 +44,8 @@ namespace avansync::server
     void accept_client_connection();
     void on_connect() const;
 
-    [[nodiscard]] std::unique_ptr<Request> read_request() const;
-    void handle_request(const Request& request);
+    [[nodiscard]] std::string read_request() const;
+    void handle_request(const std::string& request);
   };
 
 } // namespace avansync::server
