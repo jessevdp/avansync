@@ -36,7 +36,7 @@ namespace avansync::server
     [[nodiscard]] asio::ip::tcp::iostream& client() const override;
     void disconnect_current_client() override;
 
-    void log(std::string string) const override;
+    void log(const std::string& string) const override;
     [[nodiscard]] std::basic_ostream<char>& log() const override;
 
     //#endregion

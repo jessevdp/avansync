@@ -16,7 +16,7 @@ namespace avansync::server
 
     virtual void disconnect_current_client() = 0;
 
-    virtual void log(std::string) const = 0;
+    virtual void log(const std::string&) const = 0;
     [[nodiscard]] virtual std::basic_ostream<char>& log() const = 0;
   };
 

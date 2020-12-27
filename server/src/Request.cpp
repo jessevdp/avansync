@@ -1,5 +1,6 @@
 #include "Request.hpp"
 
+#include <iterator>
 #include <sstream>
 #include <utility>
 

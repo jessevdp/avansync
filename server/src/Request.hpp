@@ -22,7 +22,7 @@ namespace avansync::server
     Request(std::string command, std::vector<std::string> args);
 
     [[nodiscard]] std::string command() const;
-    std::vector<std::string> args() const;
+    [[nodiscard]] std::vector<std::string> args() const;
 
     [[nodiscard]] std::string to_string() const;
     [[nodiscard]] std::string to_line() const;

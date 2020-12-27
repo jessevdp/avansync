@@ -76,7 +76,7 @@ namespace avansync::server
 
   void Server::disconnect_current_client() { _connected = false; }
 
-  void Server::log(std::string string) const { log() << string; }
+  void Server::log(const std::string& string) const { log() << string; }
   std::basic_ostream<char>& Server::log() const { return std::cerr; }
 
   //#endregion
