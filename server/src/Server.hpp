@@ -1,14 +1,17 @@
 #pragma once
 
+#include "Context.hpp"
+#include "Request.hpp"
+#include "handler/RequestHandlerChain.hpp"
+
 #include <asio.hpp>
-#include <iostream>
 #include <memory>
 #include <string>
 
 namespace avansync::server
 {
 
-  class Server
+  class Server : public Context
   {
   private:
     inline static const char* lf {"\n"};
@@ -19,17 +22,31 @@ namespace avansync::server
     bool _running {false};
     bool _connected {false};
 
+    std::unique_ptr<asio::ip::tcp::iostream> _client {nullptr};
+
+    std::unique_ptr<handler::RequestHandlerChain> _handlers;
+
   public:
     explicit Server(int port);
     void start();
     void stop();
-    void disconnect_current_client();
+
+    //#region Context
+
+    [[nodiscard]] asio::ip::tcp::iostream& client() const override;
+    void disconnect_current_client() override;
+
+    void log(const std::string& string) const override;
+    [[nodiscard]] std::basic_ostream<char>& log() const override;
+
+    //#endregion
 
   private:
-    std::unique_ptr<asio::ip::tcp::iostream> accept_client_connection();
-    void on_connect(asio::ip::tcp::iostream& client) const;
-    std::string parse_request(asio::ip::tcp::iostream& client) const;
-    void handle_request(std::string& request, asio::ip::tcp::iostream& client);
+    void accept_client_connection();
+    void on_connect() const;
+
+    [[nodiscard]] std::unique_ptr<Request> read_request() const;
+    void handle_request(const Request& request);
   };
 
 } // namespace avansync::server
