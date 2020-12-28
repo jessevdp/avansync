@@ -1,5 +1,6 @@
 #include "Server.hpp"
 
+#include "AsioConnection.hpp"
 #include "command/DirectoryListingCommand.hpp"
 #include "command/InfoCommand.hpp"
 #include "command/QuitCommand.hpp"
@@ -36,7 +37,7 @@ namespace avansync::server
       _connected = true;
       while (_connected)
       {
-        auto request = read_request();
+        auto request = connection().read_line();
         handle_request(request);
       }
     }
@@ -45,14 +46,17 @@ namespace avansync::server
   void Server::accept_client_connection()
   {
     std::cerr << "waiting for client to connect\n";
-    _client = std::make_unique<asio::ip::tcp::iostream>();
-    _server.accept(_client->socket());
+    auto client = std::make_unique<asio::ip::tcp::iostream>();
+    auto a = client->socket().local_endpoint();
+    std::cerr << a;
+    _server.accept(client->socket());
+    _client_connection = std::make_unique<AsioConnection>(std::move(client));
   }
 
   void Server::on_connect() const
   {
-    log() << "client connected from " << _client->socket().local_endpoint() << lf;
-    client() << "Welcome to AvanSync server 1.0" << crlf;
+    log() << "client connected from " << _client_connection->local_endpoint_name() << lf;
+    connection().write_line("Welcome to AvanSync server 1.0");
   }
 
   void Server::handle_request(const std::string& request)
@@ -60,22 +64,14 @@ namespace avansync::server
     log() << "client says: " << request << lf;
 
     bool handled = _handlers->handle(request, *this);
-    if (!handled) client() << request << crlf; // simply echo the request
-  }
-
-  std::string Server::read_request() const
-  {
-    std::string request;
-    getline(*_client, request);
-    request.erase(request.end() - 1); // remove '\r'
-    return request;
+    if (!handled) connection().write_line(request); // simply echo the request
   }
 
   void Server::stop() { _running = false; }
 
   //#region Context
 
-  asio::ip::tcp::iostream& Server::client() const { return *_client; }
+  Connection& Server::connection() const { return *_client_connection; }
 
   void Server::disconnect_current_client() { _connected = false; }
 
