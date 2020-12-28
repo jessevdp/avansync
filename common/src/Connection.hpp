@@ -12,6 +12,8 @@ namespace avansync
 
     virtual void write_line(const std::string& data) const = 0;
     [[nodiscard]] virtual std::string read_line() const = 0;
+
+    [[nodiscard]] virtual std::string local_endpoint_name() const = 0;
   };
 
 } // namespace avansync

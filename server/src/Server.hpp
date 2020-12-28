@@ -14,14 +14,13 @@ namespace avansync::server
   {
   private:
     inline static const char* lf {"\n"};
-    inline static const char* crlf {"\r\n"};
 
     asio::io_context _io_context;
     asio::ip::tcp::acceptor _server;
     bool _running {false};
     bool _connected {false};
 
-    std::unique_ptr<asio::ip::tcp::iostream> _client {nullptr};
+    std::unique_ptr<Connection> _client_connection {nullptr};
 
     std::unique_ptr<handler::RequestHandlerChain> _handlers;
 
@@ -32,7 +31,7 @@ namespace avansync::server
 
     //#region Context
 
-    [[nodiscard]] asio::ip::tcp::iostream& client() const override;
+    [[nodiscard]] Connection& connection() const override;
     void disconnect_current_client() override;
 
     void log(const std::string& string) const override;
@@ -44,7 +43,6 @@ namespace avansync::server
     void accept_client_connection();
     void on_connect() const;
 
-    [[nodiscard]] std::string read_request() const;
     void handle_request(const std::string& request);
   };
 

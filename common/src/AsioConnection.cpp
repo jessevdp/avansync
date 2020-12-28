@@ -14,4 +14,11 @@ namespace avansync
     return line;
   }
 
+  std::string AsioConnection::local_endpoint_name() const
+  {
+    std::stringstream endpoint_name;
+    endpoint_name << _stream->socket().local_endpoint();
+    return endpoint_name.str();
+  }
+
 } // namespace avansync
