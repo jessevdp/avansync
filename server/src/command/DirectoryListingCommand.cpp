@@ -48,6 +48,9 @@ namespace avansync::server::command
 
   //#endregion
 
+  // TODO:
+  //  - Add subdir parameter
+  //  - handle errors (dir does not exist, no access, etc.)
   void DirectoryListingCommand::execute(Context& context) const
   {
     std::string path = context.base_dir_path();
@@ -57,13 +60,11 @@ namespace avansync::server::command
 
     for (const auto& entry : fs::directory_iterator(path))
     {
-      char type = file_type(entry);
-      unsigned long size = file_size(entry);
-      auto name = entry.path().filename().string();
-      auto timestamp = modification_timestamp(entry);
-
       std::stringstream file_info;
-      file_info << type << "|" << name << "|" << timestamp << "|" << size;
+      file_info << file_type(entry);
+      file_info << "|" << entry.path().filename().string();
+      file_info << "|" << modification_timestamp(entry);
+      file_info << "|" << file_size(entry);
 
       context.connection().write_line(file_info.str());
     }

@@ -11,14 +11,14 @@
 
 using namespace avansync::server::command;
 using namespace avansync::server::handler;
+using namespace asio::ip;
 
 namespace avansync::server
 {
 
   // TODO: check if base dir even exists on startup?
   Server::Server(int port, std::string base_dir_path) :
-      _base_dir_path {std::move(base_dir_path)}, _server {_io_context,
-                                                          asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)},
+      _base_dir_path {std::move(base_dir_path)}, _server {_io_context, tcp::endpoint(tcp::v4(), port)},
       _handlers {std::make_unique<RequestHandlerChain>()}
   {
     _handlers->add(std::make_unique<CommandRequestHandler>("info", std::make_unique<InfoCommand>()));
@@ -46,9 +46,7 @@ namespace avansync::server
   void Server::accept_client_connection()
   {
     std::cerr << "waiting for client to connect\n";
-    auto client = std::make_unique<asio::ip::tcp::iostream>();
-    auto a = client->socket().local_endpoint();
-    std::cerr << a;
+    auto client = std::make_unique<tcp::iostream>();
     _server.accept(client->socket());
     _client_connection = std::make_unique<AsioConnection>(std::move(client));
   }
