@@ -53,7 +53,7 @@ namespace avansync::server::command
     std::string path = context.base_dir_path();
 
     int item_count = std::distance(fs::directory_iterator(path), fs::directory_iterator {});
-    context.client() << std::to_string(item_count) << crlf;
+    context.connection().write_line(std::to_string(item_count));
 
     for (const auto& entry : fs::directory_iterator(path))
     {
@@ -62,7 +62,10 @@ namespace avansync::server::command
       auto name = entry.path().filename().string();
       auto timestamp = modification_timestamp(entry);
 
-      context.client() << type << "|" << name << "|" << timestamp << "|" << size << crlf;
+      std::stringstream file_info;
+      file_info << type << "|" << name << "|" << timestamp << "|" << size;
+
+      context.connection().write_line(file_info.str());
     }
   }
 
