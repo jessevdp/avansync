@@ -11,7 +11,7 @@ int main()
   try
   {
     const int server_port {12345};
-    const std::string server_base_dir {"~/Desktop/server/"};
+    const std::string server_base_dir {"./server-files"};
     Server server {server_port, server_base_dir};
     server.start();
   }
