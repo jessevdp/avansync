@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Connection.hpp"
+
 #include <asio.hpp>
 #include <iostream>
 #include <string>
@@ -12,7 +14,7 @@ namespace avansync::server
   public:
     virtual ~Context() noexcept = default;
 
-    [[nodiscard]] virtual asio::ip::tcp::iostream& client() const = 0;
+    [[nodiscard]] virtual Connection& connection() const = 0;
 
     virtual void disconnect_current_client() = 0;
 

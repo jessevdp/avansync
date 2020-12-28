@@ -12,7 +12,6 @@ namespace avansync::server::command
   {
   protected:
     inline static const char* lf {"\n"};
-    inline static const char* crlf {"\r\n"};
 
   public:
     virtual ~Command() noexcept = default;
