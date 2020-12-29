@@ -7,7 +7,7 @@ namespace avansync::server::command
   {
     context.connection().write_line("Bye.");
     context.log() << "will disconnect from client " << context.connection().local_endpoint_name() << lf;
-    context.disconnect_current_client();
+    context.connection().close();
   }
 
 } // namespace avansync::server::command
