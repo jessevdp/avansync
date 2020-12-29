@@ -24,3 +24,8 @@ doxygen/
 
 #VSCode
 .vscode/
+
+# Demo files
+server-files
+client-files
+
