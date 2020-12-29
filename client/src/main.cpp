@@ -4,6 +4,12 @@
 #include <stdexcept>
 #include <string>
 
+#include <memory>
+
+#include "AsioConnection.hpp"
+
+using namespace avansync;
+
 int main()
 {
   try
@@ -12,23 +18,35 @@ int main()
     const char* server_port {"12345"};
     const char* prompt {"avansync> "};
     const char* lf {"\n"};
-    const char* crlf {"\r\n"};
 
-    asio::ip::tcp::iostream server {server_address, server_port};
+    auto server = std::make_unique<asio::ip::tcp::iostream>(server_address, server_port);
     if (!server) throw std::runtime_error("could not connect to server");
+    AsioConnection connection {std::move(server)};
 
-    while (server)
+    std::cout << connection.read_line() << lf;
+
+    while (connection.is_open())
     {
-      std::string resp;
-      if (getline(server, resp))
-      {
-        resp.erase(resp.end() - 1); // remove '\r'
-        std::cout << resp << lf;
-        if (resp == "Bye.") break;
+      std::cout << prompt;
+      std::string request;
+      if (getline(std::cin, request)) {
 
-        std::cout << prompt;
-        std::string req;
-        if (getline(std::cin, req)) { server << req << crlf; }
+        if (request == "info")
+        {
+          connection.write_line("info");
+          std::cout << connection.read_line() << lf;
+        }
+        else if (request == "quit")
+        {
+          connection.write_line("quit");
+          std::cout << connection.read_line() << lf;
+          connection.close();
+        }
+        else
+        {
+          std::cout << "Error: unknown command: '" << request << "'" << lf;
+        }
+
       }
     }
   }
