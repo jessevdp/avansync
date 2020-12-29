@@ -1,12 +1,11 @@
+#include "AsioConnection.hpp"
+
 #include <asio.hpp>
 #include <cstdlib>
 #include <iostream>
+#include <memory>
 #include <stdexcept>
 #include <string>
-
-#include <memory>
-
-#include "AsioConnection.hpp"
 
 using namespace avansync;
 
@@ -29,7 +28,8 @@ int main()
     {
       std::cout << prompt;
       std::string request;
-      if (getline(std::cin, request)) {
+      if (getline(std::cin, request))
+      {
 
         if (request == "info")
         {
@@ -62,7 +62,6 @@ int main()
         {
           std::cout << "Error: unknown command: '" << request << "'" << lf;
         }
-
       }
     }
   }
