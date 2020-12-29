@@ -48,12 +48,21 @@ namespace avansync::server::command
 
   //#endregion
 
-  // TODO:
-  //  - handle errors (dir does not exist, no access, etc.)
   void DirectoryListingCommand::execute(Context& context) const
   {
     fs::path path {context.base_dir_path()};
-    path.append(context.connection().read_line());
+    path.append(context.connection().read_line()); // TODO: this exposes the entire server file system...
+
+    if (!fs::exists(path) || !fs::is_directory(path))
+    {
+      // TODO: proper error handling structure.
+      // The current form of error handling here just abuses the 'protocol' between client and server to
+      // show an error message to the client. This isn't robust. Nor is it reusable for other commands.
+
+      context.connection().write_line("1");
+      context.connection().write_line("Error: no such directory");
+      return;
+    }
 
     int item_count = std::distance(fs::directory_iterator(path), fs::directory_iterator {});
     context.connection().write_line(std::to_string(item_count));
