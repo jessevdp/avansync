@@ -42,6 +42,22 @@ int main()
           std::cout << connection.read_line() << lf;
           connection.close();
         }
+        else if (request == "dir")
+        {
+          connection.write_line("dir");
+
+          std::cout << "sub-directory: ";
+          std::string dir;
+          getline(std::cin, dir);
+
+          connection.write_line(dir);
+
+          int entry_count = std::stoi(connection.read_line());
+          for (int i = 0; i < entry_count; ++i)
+          {
+            std::cout << connection.read_line() << lf;
+          }
+        }
         else
         {
           std::cout << "Error: unknown command: '" << request << "'" << lf;
