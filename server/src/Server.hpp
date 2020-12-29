@@ -15,12 +15,11 @@ namespace avansync::server
   private:
     inline static const char* lf {"\n"};
 
+    bool _running {false};
     std::string _base_dir_path;
 
     asio::io_context _io_context;
     asio::ip::tcp::acceptor _server;
-    bool _running {false};
-    bool _connected {false};
 
     std::unique_ptr<Connection> _client_connection {nullptr};
 
@@ -34,7 +33,6 @@ namespace avansync::server
     //#region Context
 
     [[nodiscard]] Connection& connection() const override;
-    void disconnect_current_client() override;
 
     void log(const std::string& string) const override;
     [[nodiscard]] std::basic_ostream<char>& log() const override;

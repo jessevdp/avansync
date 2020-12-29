@@ -13,6 +13,7 @@ namespace avansync
   private:
     inline static const char* crlf {"\r\n"};
 
+    bool _closed {false};
     std::unique_ptr<asio::ip::tcp::iostream> _stream;
 
   public:
@@ -20,6 +21,11 @@ namespace avansync
 
     void write_line(const std::string& data) const override;
     [[nodiscard]] std::string read_line() const override;
+
+    void close() override;
+
+    [[nodiscard]] bool is_open() const override;
+    explicit operator bool() const override;
 
     std::string local_endpoint_name() const override;
   };

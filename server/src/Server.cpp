@@ -34,8 +34,7 @@ namespace avansync::server
       accept_client_connection();
       on_connect();
 
-      _connected = true;
-      while (_connected)
+      while (_client_connection && _client_connection->is_open())
       {
         auto request = connection().read_line();
         handle_request(request);
@@ -70,8 +69,6 @@ namespace avansync::server
   //#region Context
 
   Connection& Server::connection() const { return *_client_connection; }
-
-  void Server::disconnect_current_client() { _connected = false; }
 
   void Server::log(const std::string& string) const { log() << string; }
   std::basic_ostream<char>& Server::log() const { return std::cerr; }

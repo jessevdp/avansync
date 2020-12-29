@@ -14,6 +14,15 @@ namespace avansync
     return line;
   }
 
+  void AsioConnection::close()
+  {
+    _stream->close();
+    _closed = true;
+  }
+
+  bool AsioConnection::is_open() const { return !_stream->fail() && !_closed; }
+  AsioConnection::operator bool() const { return is_open(); }
+
   std::string AsioConnection::local_endpoint_name() const
   {
     std::stringstream endpoint_name;
