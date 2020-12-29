@@ -49,11 +49,11 @@ namespace avansync::server::command
   //#endregion
 
   // TODO:
-  //  - Add subdir parameter
   //  - handle errors (dir does not exist, no access, etc.)
   void DirectoryListingCommand::execute(Context& context) const
   {
-    std::string path = context.base_dir_path();
+    fs::path path {context.base_dir_path()};
+    path.append(context.connection().read_line());
 
     int item_count = std::distance(fs::directory_iterator(path), fs::directory_iterator {});
     context.connection().write_line(std::to_string(item_count));
