@@ -42,8 +42,6 @@ namespace avansync::server
   {
     std::cerr << "waiting for client to connect\n";
     auto client = std::make_unique<asio::ip::tcp::iostream>();
-    auto a = client->socket().local_endpoint();
-    std::cerr << a;
     _server.accept(client->socket());
     _client_connection = std::make_unique<AsioConnection>(std::move(client));
   }
