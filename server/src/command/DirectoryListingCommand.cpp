@@ -55,12 +55,7 @@ namespace avansync::server::command
 
     if (!fs::exists(path) || !fs::is_directory(path))
     {
-      // TODO: proper error handling structure.
-      // The current form of error handling here just abuses the 'protocol' between client and server to
-      // show an error message to the client. This isn't robust. Nor is it reusable for other commands.
-
-      context.connection().write_line("1");
-      context.connection().write_line("Error: no such directory");
+      context.connection().write_exception("no such directory");
       return;
     }
 
