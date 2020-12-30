@@ -1,5 +1,7 @@
 #include "DirectoryListingCommand.hpp"
 
+#include <iomanip>
+
 #ifdef CXX_FILESYSTEM_IS_EXPERIMENTAL
 #include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;
@@ -35,7 +37,7 @@ namespace avansync::server::command
   unsigned long file_size(const fs::directory_entry& entry)
   {
     unsigned long size = 0;
-    if (fs::is_regular_file(entry) && !fs::is_symlink(entry)) { size = entry.file_size(); }
+    if (fs::is_regular_file(entry) && !fs::is_symlink(entry)) { size = fs::file_size(entry); }
     return size;
   }
 
