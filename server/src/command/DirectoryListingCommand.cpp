@@ -16,15 +16,15 @@ namespace avansync::server::command
   {
     char type = '*';
 
-    if (entry.is_symlink())
+    if (fs::is_symlink(entry))
     {
       // treat as 'other'
     }
-    else if (entry.is_directory())
+    else if (fs::is_directory(entry))
     {
       type = 'D';
     }
-    else if (entry.is_regular_file())
+    else if (fs::is_regular_file(entry))
     {
       type = 'F';
     }
@@ -35,13 +35,13 @@ namespace avansync::server::command
   unsigned long file_size(const fs::directory_entry& entry)
   {
     unsigned long size = 0;
-    if (entry.is_regular_file() && !entry.is_symlink()) { size = entry.file_size(); }
+    if (fs::is_regular_file(entry) && !fs::is_symlink(entry)) { size = entry.file_size(); }
     return size;
   }
 
   std::string modification_timestamp(const fs::directory_entry& entry)
   {
-    auto timestamp = entry.last_write_time();
+    auto timestamp = fs::last_write_time(entry);
     auto timestamp_t = decltype(timestamp)::clock::to_time_t(timestamp);
 
     std::stringstream formatted_timestamp;
