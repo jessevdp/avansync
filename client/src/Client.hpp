@@ -15,7 +15,6 @@ namespace avansync::client
   {
   private:
     inline static const char* prompt {"avansync> "};
-    inline static const char* lf {"\n"};
 
     std::unique_ptr<Connection> _connection {nullptr};
     std::unique_ptr<handler::RequestHandlerChain> _handlers;
@@ -28,9 +27,7 @@ namespace avansync::client
     //#region Context
 
     [[nodiscard]] Connection& connection() const override;
-
-    void log(const std::string& string) const override;
-    [[nodiscard]] std::basic_ostream<char>& log() const override;
+    [[nodiscard]] Console& console() const override;
 
     //#endregion
 

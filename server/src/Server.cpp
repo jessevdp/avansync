@@ -1,5 +1,6 @@
 #include "Server.hpp"
 
+#include "ServerConsole.hpp"
 #include "command/InfoCommand.hpp"
 #include "command/QuitCommand.hpp"
 #include "connection/AsioConnection.hpp"
@@ -48,13 +49,13 @@ namespace avansync::server
 
   void Server::on_connect() const
   {
-    log() << "client connected from " << _client_connection->local_endpoint_name() << lf;
+    console().write_line("client connected from " + _client_connection->local_endpoint_name());
     connection().write_line("Welcome to AvanSync server 1.0");
   }
 
   void Server::handle_request(const std::string& request)
   {
-    log() << "client says: " << request << lf;
+    console().write_line("client says: " + request);
 
     bool handled = _handlers->handle(request, *this);
     if (!handled) connection().write_line(request); // simply echo the request
@@ -65,9 +66,7 @@ namespace avansync::server
   //#region Context
 
   Connection& Server::connection() const { return *_client_connection; }
-
-  void Server::log(const std::string& string) const { log() << string; }
-  std::basic_ostream<char>& Server::log() const { return std::cerr; }
+  Console& Server::console() const { return ServerConsole::instance(); }
 
   //#endregion
 
