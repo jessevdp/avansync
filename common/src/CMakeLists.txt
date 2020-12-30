@@ -4,9 +4,7 @@ add_library(common-lib STATIC ${COMMON_LIB_SOURCES})
 find_package(Threads REQUIRED)
 
 find_package(Filesystem REQUIRED COMPONENTS Final Experimental)
-if (CXX_FILESYSTEM_IS_EXPERIMENTAL)
-    add_compile_definitions(CXX_FILESYSTEM_IS_EXPERIMENTAL)
-endif ()
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DCXX_FILESYSTEM_IS_EXPERIMENTAL=${CXX_FILESYSTEM_IS_EXPERIMENTAL}")
 
 set(ASIO_DIR ${CMAKE_SOURCE_DIR}/vendor/asio-1.18.0)
 find_package(Asio REQUIRED)
