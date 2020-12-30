@@ -6,7 +6,7 @@ namespace avansync::server::command
   void QuitCommand::execute(Context& context) const
   {
     context.connection().write_line("Bye.");
-    context.log() << "will disconnect from client " << context.connection().local_endpoint_name() << lf;
+    context.console().write_line("will disconnect from client " + context.connection().local_endpoint_name());
     context.connection().close();
   }
 

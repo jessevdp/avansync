@@ -4,7 +4,7 @@
 
 #include <memory>
 
-namespace avansync::server::handler
+namespace avansync::handler
 {
 
   class RequestHandlerChain
@@ -18,4 +18,4 @@ namespace avansync::server::handler
     bool handle(const std::string&, Context&) const;
   };
 
-} // namespace avansync::server::handler
+} // namespace avansync::handler

@@ -1,12 +1,13 @@
 #pragma once
 
-#include "Connection.hpp"
+#include "Console.hpp"
+#include "connection/Connection.hpp"
 
 #include <asio.hpp>
 #include <iostream>
 #include <string>
 
-namespace avansync::server
+namespace avansync
 {
 
   class Context
@@ -15,11 +16,9 @@ namespace avansync::server
     virtual ~Context() noexcept = default;
 
     [[nodiscard]] virtual Connection& connection() const = 0;
-
-    virtual void log(const std::string&) const = 0;
-    [[nodiscard]] virtual std::basic_ostream<char>& log() const = 0;
+    [[nodiscard]] virtual Console& console() const = 0;
 
     [[nodiscard]] virtual std::string base_dir_path() const = 0;
   };
 
-} // namespace avansync::server
+} // namespace avansync
