@@ -4,8 +4,6 @@ project(AvanSync)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-set(CMAKE_VERBOSE_MAKEFILE ON)
-
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 
 # TODO: move this to common-lib?
