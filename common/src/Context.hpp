@@ -17,6 +17,8 @@ namespace avansync
 
     [[nodiscard]] virtual Connection& connection() const = 0;
     [[nodiscard]] virtual Console& console() const = 0;
+
+    [[nodiscard]] virtual std::string base_dir_path() const = 0;
   };
 
 } // namespace avansync

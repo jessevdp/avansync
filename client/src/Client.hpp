@@ -16,11 +16,13 @@ namespace avansync::client
   private:
     inline static const char* prompt {"avansync> "};
 
+    std::string _base_dir_path;
+
     std::unique_ptr<Connection> _connection {nullptr};
     std::unique_ptr<handler::RequestHandlerChain> _handlers;
 
   public:
-    Client();
+    explicit Client(std::string base_dir_path);
 
     void connect_to(const std::string& server_address, const std::string& server_port);
 
@@ -28,6 +30,8 @@ namespace avansync::client
 
     [[nodiscard]] Connection& connection() const override;
     [[nodiscard]] Console& console() const override;
+
+    [[nodiscard]] std::string base_dir_path() const override;
 
     //#endregion
 

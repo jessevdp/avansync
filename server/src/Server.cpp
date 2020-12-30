@@ -1,6 +1,7 @@
 #include "Server.hpp"
 
 #include "ServerConsole.hpp"
+#include "command/DirectoryListingCommand.hpp"
 #include "command/InfoCommand.hpp"
 #include "command/QuitCommand.hpp"
 #include "connection/AsioConnection.hpp"
@@ -10,16 +11,21 @@
 #include <iostream>
 
 using namespace avansync::server::command;
+
+using namespace asio::ip;
+
 using namespace avansync::handler;
 
 namespace avansync::server
 {
 
-  Server::Server(int port) :
-      _server {_io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)},
+  // TODO: check if base dir even exists on startup?
+  Server::Server(int port, std::string base_dir_path) :
+      _base_dir_path {std::move(base_dir_path)}, _server {_io_context, tcp::endpoint(tcp::v4(), port)},
       _handlers {std::make_unique<RequestHandlerChain>()}
   {
     _handlers->add(std::make_unique<CommandRequestHandler>("info", std::make_unique<InfoCommand>()));
+    _handlers->add(std::make_unique<CommandRequestHandler>("dir", std::make_unique<DirectoryListingCommand>()));
     _handlers->add(std::make_unique<CommandRequestHandler>("quit", std::make_unique<QuitCommand>()));
   }
 
@@ -42,7 +48,7 @@ namespace avansync::server
   void Server::accept_client_connection()
   {
     std::cerr << "waiting for client to connect\n";
-    auto client = std::make_unique<asio::ip::tcp::iostream>();
+    auto client = std::make_unique<tcp::iostream>();
     _server.accept(client->socket());
     _client_connection = std::make_unique<AsioConnection>(std::move(client));
   }
@@ -67,6 +73,8 @@ namespace avansync::server
 
   Connection& Server::connection() const { return *_client_connection; }
   Console& Server::console() const { return ServerConsole::instance(); }
+
+  std::string Server::base_dir_path() const { return _base_dir_path; }
 
   //#endregion
 
