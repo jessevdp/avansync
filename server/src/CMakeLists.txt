@@ -4,6 +4,10 @@ list(REMOVE_ITEM SERVER_LIB_SOURCES "main.cpp")
 find_package(Filesystem REQUIRED
         COMPONENTS Final Experimental)
 
+if (CXX_FILESYSTEM_IS_EXPERIMENTAL)
+    add_compile_definitions(CXX_FILESYSTEM_IS_EXPERIMENTAL)
+endif()
+
 add_library(server-lib STATIC ${SERVER_LIB_SOURCES})
 target_link_libraries(server-lib
         PUBLIC common-lib
