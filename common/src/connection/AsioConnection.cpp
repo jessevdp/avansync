@@ -6,7 +6,28 @@ namespace avansync
 
   void AsioConnection::write_line(const std::string& data) const { (*_stream) << data << crlf; }
 
+  void AsioConnection::write_exception(const std::exception& exception) const { write_exception(exception.what()); }
+
+  void AsioConnection::write_exception(const std::string& message) const
+  {
+    write_line(EXCEPTION_HEADER);
+    write_line(message);
+  }
+
   std::string AsioConnection::read_line() const
+  {
+    std::string line = do_read_line();
+
+    if (line == EXCEPTION_HEADER)
+    {
+      std::string message = do_read_line();
+      throw std::runtime_error {message};
+    }
+
+    return line;
+  }
+
+  std::string AsioConnection::do_read_line() const
   {
     std::string line;
     getline(*_stream, line);
