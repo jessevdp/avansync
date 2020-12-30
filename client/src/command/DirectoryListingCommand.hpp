@@ -11,4 +11,4 @@ namespace avansync::client::command
     void execute(Context& context) const override;
   };
 
-}
+} // namespace avansync::client::command
