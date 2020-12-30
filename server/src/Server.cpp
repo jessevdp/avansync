@@ -1,8 +1,8 @@
 #include "Server.hpp"
 
-#include "AsioConnection.hpp"
 #include "command/InfoCommand.hpp"
 #include "command/QuitCommand.hpp"
+#include "connection/AsioConnection.hpp"
 #include "handler/CommandRequestHandler.hpp"
 
 #include <algorithm>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Connection.hpp"
+#include "connection/Connection.hpp"
 
 #include <asio.hpp>
 #include <iostream>
