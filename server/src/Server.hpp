@@ -13,8 +13,6 @@ namespace avansync::server
   class Server : public Context
   {
   private:
-    inline static const char* lf {"\n"};
-
     bool _running {false};
 
     asio::io_context _io_context;
@@ -32,9 +30,7 @@ namespace avansync::server
     //#region Context
 
     [[nodiscard]] Connection& connection() const override;
-
-    void log(const std::string& string) const override;
-    [[nodiscard]] std::basic_ostream<char>& log() const override;
+    [[nodiscard]] Console& console() const override;
 
     //#endregion
 

@@ -1,5 +1,6 @@
 #include "Client.hpp"
 
+#include "ClientConsole.hpp"
 #include "command/InfoCommand.hpp"
 #include "command/QuitCommand.hpp"
 #include "connection/AsioConnection.hpp"
@@ -36,7 +37,7 @@ namespace avansync::client
   void Client::handle_request(const std::string& request)
   {
     bool handled = _handlers->handle(request, *this);
-    if (!handled) { log() << "Error: unknown command: '" << request << "'" << lf; }
+    if (!handled) { console().write_line("Error: unknown command: '" + request + "'"); }
   }
 
   void Client::establish_connection(const std::string& server_address, const std::string& server_port)
@@ -49,23 +50,19 @@ namespace avansync::client
   void Client::on_connect() const
   {
     // Read welcome message from server
-    std::cout << _connection->read_line() << lf;
+    console().write_line(_connection->read_line());
   }
 
   std::string Client::prompt_request() const
   {
-    std::cout << prompt;
-    std::string request;
-    getline(std::cin, request);
-    return request;
+    console().write(prompt);
+    return console().read_line();
   }
 
   //#region Context
 
   Connection& Client::connection() const { return *_connection; }
-
-  std::basic_ostream<char>& Client::log() const { return std::cout; }
-  void Client::log(const std::string& string) const { log() << string; }
+  Console& Client::console() const { return ClientConsole::instance(); }
 
   //#endregion
 
