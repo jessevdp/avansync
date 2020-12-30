@@ -6,7 +6,7 @@
 #include <iostream>
 #include <string>
 
-namespace avansync::server
+namespace avansync
 {
 
   class Context

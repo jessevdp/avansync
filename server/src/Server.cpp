@@ -9,7 +9,7 @@
 #include <iostream>
 
 using namespace avansync::server::command;
-using namespace avansync::server::handler;
+using namespace avansync::handler;
 
 namespace avansync::server
 {

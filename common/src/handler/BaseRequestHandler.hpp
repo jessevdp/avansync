@@ -2,7 +2,7 @@
 
 #include "RequestHandler.hpp"
 
-namespace avansync::server::handler
+namespace avansync::handler
 {
 
   class BaseRequestHandler : public RequestHandler
@@ -19,4 +19,4 @@ namespace avansync::server::handler
     virtual bool do_handle(const std::string&, Context&) const = 0;
   };
 
-} // namespace avansync::server::handler
+} // namespace avansync::handler

@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-namespace avansync::server::command
+namespace avansync
 {
 
   class Command

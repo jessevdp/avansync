@@ -1,6 +1,6 @@
 #include "BaseRequestHandler.hpp"
 
-namespace avansync::server::handler
+namespace avansync::handler
 {
 
   bool BaseRequestHandler::handle(const std::string& request, Context& context) const
@@ -12,4 +12,4 @@ namespace avansync::server::handler
 
   void BaseRequestHandler::link_next(std::unique_ptr<RequestHandler> next) { _next = std::move(next); }
 
-} // namespace avansync::server::handler
+} // namespace avansync::handler
