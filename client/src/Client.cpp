@@ -16,7 +16,8 @@ using namespace avansync::handler;
 namespace avansync::client
 {
 
-  Client::Client() : _handlers {std::make_unique<RequestHandlerChain>()}
+  Client::Client(std::string base_dir_path) :
+      _base_dir_path {std::move(base_dir_path)}, _handlers {std::make_unique<RequestHandlerChain>()}
   {
     _handlers->add(std::make_unique<CommandRequestHandler>("info", std::make_unique<InfoCommand>()));
     _handlers->add(std::make_unique<CommandRequestHandler>("quit", std::make_unique<QuitCommand>()));
@@ -63,6 +64,8 @@ namespace avansync::client
 
   Connection& Client::connection() const { return *_connection; }
   Console& Client::console() const { return ClientConsole::instance(); }
+
+  std::string Client::base_dir_path() const { return _base_dir_path; }
 
   //#endregion
 
