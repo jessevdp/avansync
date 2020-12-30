@@ -1,14 +1,25 @@
 #include "Client.hpp"
 
+#include "command/InfoCommand.hpp"
+#include "command/QuitCommand.hpp"
 #include "connection/AsioConnection.hpp"
+#include "handler/CommandRequestHandler.hpp"
 
 #include <asio.hpp>
 #include <iostream>
 
 using namespace asio::ip;
+using namespace avansync::client::command;
+using namespace avansync::handler;
 
 namespace avansync::client
 {
+
+  Client::Client() : _handlers {std::make_unique<RequestHandlerChain>()}
+  {
+    _handlers->add(std::make_unique<CommandRequestHandler>("info", std::make_unique<InfoCommand>()));
+    _handlers->add(std::make_unique<CommandRequestHandler>("quit", std::make_unique<QuitCommand>()));
+  }
 
   void Client::connect_to(const std::string& server_address, const std::string& server_port)
   {
@@ -24,23 +35,8 @@ namespace avansync::client
 
   void Client::handle_request(const std::string& request)
   {
-    // TODO: clean up using request handler chain/pipeline and commands
-
-    if (request == "info")
-    {
-      _connection->write_line("info");
-      std::cout << _connection->read_line() << lf;
-    }
-    else if (request == "quit")
-    {
-      _connection->write_line("quit");
-      std::cout << _connection->read_line() << lf;
-      _connection->close();
-    }
-    else
-    {
-      std::cout << "Error: unknown command: '" << request << "'" << lf;
-    }
+    bool handled = _handlers->handle(request, *this);
+    if (!handled) { log() << "Error: unknown command: '" << request << "'" << lf; }
   }
 
   void Client::establish_connection(const std::string& server_address, const std::string& server_port)
@@ -64,4 +60,13 @@ namespace avansync::client
     return request;
   }
 
-}
+  //#region Context
+
+  Connection& Client::connection() const { return *_connection; }
+
+  std::basic_ostream<char>& Client::log() const { return std::cout; }
+  void Client::log(const std::string& string) const { log() << string; }
+
+  //#endregion
+
+} // namespace avansync::client
