@@ -1,10 +1,9 @@
 file(GLOB_RECURSE SERVER_LIB_SOURCES "*.cpp")
 list(REMOVE_ITEM SERVER_LIB_SOURCES "main.cpp")
 
-find_package(Filesystem REQUIRED
-        COMPONENTS Final Experimental)
+find_package(Filesystem REQUIRED COMPONENTS Final Experimental)
 
-if (CXX_FILESYSTEM_IS_EXPERIMENTAL)
+if (CXX_FILESYSTEM_HEADER STREQUAL "experimental/filesystem")
     add_compile_definitions(CXX_FILESYSTEM_IS_EXPERIMENTAL)
 endif()
 
