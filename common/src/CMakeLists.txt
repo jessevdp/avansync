@@ -10,7 +10,7 @@ add_compile_definitions(ASIO_STANDALONE=YES)
 target_include_directories(common-lib
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
         PUBLIC ${ASIO_INCLUDE_DIRS}
-        PRIVATE std::filesystem)
+        PUBLIC std::filesystem)
 
 target_link_libraries(common-lib
         PRIVATE ${CMAKE_THREAD_LIBS_INIT})
