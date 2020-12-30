@@ -1,13 +1,13 @@
 #include "Client.hpp"
 
 #include "ClientConsole.hpp"
+#include "command/DirectoryListingCommand.hpp"
 #include "command/InfoCommand.hpp"
 #include "command/QuitCommand.hpp"
 #include "connection/AsioConnection.hpp"
 #include "handler/CommandRequestHandler.hpp"
 
 #include <asio.hpp>
-#include <iostream>
 
 using namespace asio::ip;
 using namespace avansync::client::command;
@@ -20,6 +20,7 @@ namespace avansync::client
       _base_dir_path {std::move(base_dir_path)}, _handlers {std::make_unique<RequestHandlerChain>()}
   {
     _handlers->add(std::make_unique<CommandRequestHandler>("info", std::make_unique<InfoCommand>()));
+    _handlers->add(std::make_unique<CommandRequestHandler>("dir", std::make_unique<DirectoryListingCommand>()));
     _handlers->add(std::make_unique<CommandRequestHandler>("quit", std::make_unique<QuitCommand>()));
   }
 
