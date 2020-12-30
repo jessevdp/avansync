@@ -1,5 +1,6 @@
 #pragma once
 
+#include <exception>
 #include <string>
 
 namespace avansync
@@ -11,6 +12,9 @@ namespace avansync
     virtual ~Connection() noexcept = default;
 
     virtual void write_line(const std::string& data) const = 0;
+    virtual void write_exception(const std::string& message) const = 0;
+    virtual void write_exception(const std::exception& exception) const = 0;
+
     [[nodiscard]] virtual std::string read_line() const = 0;
 
     virtual void close() = 0;

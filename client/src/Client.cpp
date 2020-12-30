@@ -8,6 +8,7 @@
 #include "handler/CommandRequestHandler.hpp"
 
 #include <asio.hpp>
+#include <stdexcept>
 
 using namespace asio::ip;
 using namespace avansync::client::command;
@@ -38,8 +39,17 @@ namespace avansync::client
 
   void Client::handle_request(const std::string& request)
   {
-    bool handled = _handlers->handle(request, *this);
-    if (!handled) { console().write_line("Error: unknown command: '" + request + "'"); }
+    try
+    {
+      bool handled = _handlers->handle(request, *this);
+      if (!handled) { console().write_line("Error: unknown command: '" + request + "'"); }
+    }
+    catch (const std::runtime_error& e)
+    {
+      std::string message = "Error: ";
+      message += e.what();
+      console().write_line(message);
+    }
   }
 
   void Client::establish_connection(const std::string& server_address, const std::string& server_port)
