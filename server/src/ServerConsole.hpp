@@ -31,4 +31,4 @@ namespace avansync::server
     //#endregion
   };
 
-} // namespace avansync::client
+} // namespace avansync::server

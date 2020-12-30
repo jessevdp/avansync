@@ -1,7 +1,7 @@
 #pragma once
 
-#include "connection/Connection.hpp"
 #include "Console.hpp"
+#include "connection/Connection.hpp"
 
 #include <asio.hpp>
 #include <iostream>
