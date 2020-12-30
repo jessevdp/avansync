@@ -2,7 +2,8 @@
 
 #include "Command.hpp"
 
-namespace avansync::client::command {
+namespace avansync::client::command
+{
 
   class InfoCommand : public Command
   {
@@ -10,4 +11,4 @@ namespace avansync::client::command {
     void execute(Context& context) const override;
   };
 
-}
+} // namespace avansync::client::command

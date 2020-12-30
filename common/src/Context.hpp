@@ -20,4 +20,4 @@ namespace avansync
     [[nodiscard]] virtual std::basic_ostream<char>& log() const = 0;
   };
 
-} // namespace avansync::server
+} // namespace avansync

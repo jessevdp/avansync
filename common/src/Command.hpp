@@ -19,4 +19,4 @@ namespace avansync
     virtual void execute(Context& context) const = 0;
   };
 
-} // namespace avansync::server::command
+} // namespace avansync
