@@ -1,7 +1,8 @@
 file(GLOB_RECURSE SERVER_LIB_SOURCES "*.cpp")
 list(REMOVE_ITEM SERVER_LIB_SOURCES "main.cpp")
 
-find_package(Filesystem REQUIRED)
+find_package(Filesystem REQUIRED
+        COMPONENTS Final Experimental)
 
 add_library(server-lib STATIC ${SERVER_LIB_SOURCES})
 target_link_libraries(server-lib
