@@ -2,10 +2,10 @@
 
 #include <utility>
 
-namespace avansync::server::handler
+namespace avansync::handler
 {
 
-  CommandRequestHandler::CommandRequestHandler(std::string name, std::unique_ptr<command::Command> command) :
+  CommandRequestHandler::CommandRequestHandler(std::string name, std::unique_ptr<Command> command) :
       _name {std::move(name)}, _command {std::move(command)}
   {}
 
@@ -19,4 +19,4 @@ namespace avansync::server::handler
     return false;
   }
 
-} // namespace avansync::server::handler
+} // namespace avansync::handler

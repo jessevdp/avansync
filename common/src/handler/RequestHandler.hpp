@@ -4,7 +4,7 @@
 
 #include <memory>
 
-namespace avansync::server::handler
+namespace avansync::handler
 {
 
   class RequestHandler
@@ -16,4 +16,4 @@ namespace avansync::server::handler
     virtual void link_next(std::unique_ptr<RequestHandler> next) = 0;
   };
 
-} // namespace avansync::server::handler
+} // namespace avansync::handler

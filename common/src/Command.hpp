@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-namespace avansync::server::command
+namespace avansync
 {
 
   class Command
@@ -19,4 +19,4 @@ namespace avansync::server::command
     virtual void execute(Context& context) const = 0;
   };
 
-} // namespace avansync::server::command
+} // namespace avansync

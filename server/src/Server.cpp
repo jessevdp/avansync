@@ -1,15 +1,15 @@
 #include "Server.hpp"
 
-#include "AsioConnection.hpp"
 #include "command/InfoCommand.hpp"
 #include "command/QuitCommand.hpp"
+#include "connection/AsioConnection.hpp"
 #include "handler/CommandRequestHandler.hpp"
 
 #include <algorithm>
 #include <iostream>
 
 using namespace avansync::server::command;
-using namespace avansync::server::handler;
+using namespace avansync::handler;
 
 namespace avansync::server
 {

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Connection.hpp"
+#include "connection/Connection.hpp"
 
 #include <asio.hpp>
 #include <iostream>
 #include <string>
 
-namespace avansync::server
+namespace avansync
 {
 
   class Context
@@ -20,4 +20,4 @@ namespace avansync::server
     [[nodiscard]] virtual std::basic_ostream<char>& log() const = 0;
   };
 
-} // namespace avansync::server
+} // namespace avansync

@@ -1,6 +1,6 @@
 #include "RequestHandlerChain.hpp"
 
-namespace avansync::server::handler
+namespace avansync::handler
 {
 
   void RequestHandlerChain::add(std::unique_ptr<RequestHandler> handler)
@@ -22,4 +22,4 @@ namespace avansync::server::handler
     return false;
   }
 
-} // namespace avansync::server::handler
+} // namespace avansync::handler

@@ -1,24 +1,24 @@
 #pragma once
 
 #include "BaseRequestHandler.hpp"
-#include "command/Command.hpp"
+#include "Command.hpp"
 
 #include <memory>
 
-namespace avansync::server::handler
+namespace avansync::handler
 {
 
   class CommandRequestHandler : public BaseRequestHandler
   {
   private:
     std::string _name;
-    std::unique_ptr<command::Command> _command;
+    std::unique_ptr<Command> _command;
 
   public:
-    CommandRequestHandler(std::string name, std::unique_ptr<command::Command> command);
+    CommandRequestHandler(std::string name, std::unique_ptr<Command> command);
 
   protected:
     bool do_handle(const std::string& request, Context& context) const override;
   };
 
-} // namespace avansync::server::handler
+} // namespace avansync::handler
