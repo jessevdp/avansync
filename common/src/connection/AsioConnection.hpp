@@ -11,7 +11,7 @@ namespace avansync
   class AsioConnection : public Connection
   {
   private:
-    inline static const std::string EXCEPTION_HEADER = "ERROR";
+    inline static const std::string EXCEPTION_PREFIX = "Error: ";
     inline static const char* crlf {"\r\n"};
 
     bool _closed {false};
@@ -28,7 +28,7 @@ namespace avansync
      * Read a single line of data send from the other side of the connection.
      *
      * @throws std::runtime_error when it encounters an exception send from the other side of the connection. (Indicated
-     * by a single line containing the EXCEPTION_HEADER followed by a line containing the error message.)
+     * by a line prefixed with the EXCEPTION_PREFIX followed by the error message.)
      *
      * @return the line of data
      */
@@ -42,7 +42,8 @@ namespace avansync
     [[nodiscard]] std::string local_endpoint_name() const override;
 
   private:
-    [[nodiscard]] std::string do_read_line() const;
+    [[nodiscard]] bool is_exception(const std::string& line) const;
+    std::string retrieve_exception_message(std::string line) const;
   };
 
 } // namespace avansync

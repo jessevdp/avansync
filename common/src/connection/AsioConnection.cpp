@@ -8,30 +8,28 @@ namespace avansync
 
   void AsioConnection::write_exception(const std::exception& exception) const { write_exception(exception.what()); }
 
-  void AsioConnection::write_exception(const std::string& message) const
-  {
-    write_line(EXCEPTION_HEADER);
-    write_line(message);
-  }
+  void AsioConnection::write_exception(const std::string& message) const { write_line(EXCEPTION_PREFIX + message); }
 
   std::string AsioConnection::read_line() const
   {
-    std::string line = do_read_line();
+    std::string line;
+    getline(*_stream, line);
+    line.erase(line.end() - 1); // remove '\r'
 
-    if (line == EXCEPTION_HEADER)
+    if (is_exception(line))
     {
-      std::string message = do_read_line();
+      std::string message = retrieve_exception_message(line);
       throw std::runtime_error {message};
     }
 
     return line;
   }
 
-  std::string AsioConnection::do_read_line() const
+  bool AsioConnection::is_exception(const std::string& line) const { return line.rfind(EXCEPTION_PREFIX, 0) == 0; }
+
+  std::string AsioConnection::retrieve_exception_message(std::string line) const
   {
-    std::string line;
-    getline(*_stream, line);
-    line.erase(line.end() - 1); // remove '\r'
+    if (is_exception(line)) line.erase(0, EXCEPTION_PREFIX.length());
     return line;
   }
 
