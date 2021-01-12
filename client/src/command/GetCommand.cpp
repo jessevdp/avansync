@@ -1,8 +1,6 @@
 #include "GetCommand.hpp"
 
-#include "filesystem/fs.hpp"
-
-#include <fstream>
+#include "filesystem/VectorFileBuffer.hpp"
 
 namespace avansync::client::command
 {
@@ -12,41 +10,22 @@ namespace avansync::client::command
     context.connection().write_line("get");
 
     context.console().write("file: ");
-    auto file_name = context.console().read_line();
-    context.connection().write_line(file_name);
+    auto filename = context.console().read_line();
+    context.connection().write_line(filename);
 
     int file_size = std::stoi(context.connection().read_line());
 
-    // Read file contents from stream into buffer
-    std::vector<char> file_buffer;
-    file_buffer.reserve(file_size);
-    context.connection().read_bytes(file_size, file_buffer.data());
-
     // TODO: debug info?
 
-    // TODO: generalize and move
-    // Attempt to write the file to disk
+    // Read file contents from server into buffer
+    VectorFileBuffer buffer {file_size};
+    context.connection().read_bytes(buffer.size(), buffer.data());
 
-    fs::path path {context.base_dir_path()};
-    path.append(file_name);
+    // Write file contents from buffer to disk
+    context.filesystem().create_directories_for_file(filename);
+    context.filesystem().overwrite_file(filename, buffer);
 
-    fs::create_directories(path.parent_path());
-
-    std::ofstream file;
-    file.exceptions(std::ios::failbit | std::ios::badbit);
-
-    try
-    {
-      file.open(path, std::ios::binary | std::ios::trunc);
-      file.write(file_buffer.data(), file_size);
-      file.close();
-    }
-    catch (std::ios::failure& failure)
-    {
-      // TODO: error details?
-      throw std::runtime_error {"problem writing to file: '" + path.string() + "'"};
-    }
-
+    // Communicate completion to user
     context.console().write_line("OK");
   }
 
