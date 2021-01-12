@@ -36,12 +36,7 @@ namespace avansync
     }
     catch (std::ios::failure& failure)
     {
-      if (failure.code() == std::errc::permission_denied) { throw FilesystemException {"no permission"}; }
-      else
-      {
-        auto m = "problem reading file (file: '" + relative_path + "', error: '" + failure.code().message() + "')";
-        throw FilesystemException {m};
-      }
+      handle_error(failure.code());
     }
 
     return buffer;
@@ -65,16 +60,7 @@ namespace avansync
     }
     catch (std::ios::failure& failure)
     {
-      if (failure.code() == std::errc::permission_denied) { throw FilesystemException {"no permission"}; }
-      else if (failure.code() == std::errc::file_too_large)
-      {
-        throw FilesystemException {"not enough disk space"};
-      }
-      else
-      {
-        auto m = "problem overwriting file (file: '" + relative_path + "', error: '" + failure.code().message() + "')";
-        throw FilesystemException {m};
-      }
+      handle_error(failure.code());
     }
   }
 
@@ -89,12 +75,7 @@ namespace avansync
     }
     catch (const fs::filesystem_error& e)
     {
-      if (e.code() == std::errc::permission_denied) { throw FilesystemException {"no permission"}; }
-      else
-      {
-        auto m = "problem deleting entry (path: '" + relative_path + "', error: '" + e.code().message() + "')";
-        throw FilesystemException {m};
-      }
+      handle_error(e.code());
     }
   }
 
@@ -111,11 +92,7 @@ namespace avansync
     }
     catch (const fs::filesystem_error& e)
     {
-      if (e.code() == std::errc::permission_denied) { throw FilesystemException {"no permission"}; }
-      else
-      {
-        throw FilesystemException {"unexpected filesystem error: '" + e.code().message() + "'"};
-      }
+      handle_error(e.code());
     }
   }
 
@@ -147,6 +124,19 @@ namespace avansync
     fs::path full {_base_dir};
     full.append(relative_path); // TODO: this exposes the entire file system...
     return full;
+  }
+
+  void StandardFilesystem::handle_error(const std::error_code& error) const
+  {
+    if (error == std::errc::permission_denied) { throw FilesystemException {"no permission"}; }
+    else if (error == std::errc::file_too_large)
+    {
+      throw FilesystemException {"not enough disk space"};
+    }
+    else
+    {
+      throw FilesystemException {"unexpected filesystem error: '" + error.message() + "'"};
+    }
   }
 
 } // namespace avansync

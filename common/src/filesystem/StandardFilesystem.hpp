@@ -27,6 +27,8 @@ namespace avansync
 
   private:
     [[nodiscard]] fs::path full_path(const std::string& relative_path) const;
+
+    void handle_error(const std::error_code& error) const;
   };
 
 } // namespace avansync
