@@ -52,7 +52,9 @@ namespace avansync
     auto path = full_path(relative_path);
 
     if (!fs::exists(path.parent_path()) || !fs::is_directory(path.parent_path()))
-    { throw FilesystemException {"invalid path"}; }
+    {
+      throw FilesystemException {"invalid path"};
+    }
 
     std::ofstream file;
     file.exceptions(std::ios::failbit | std::ios::badbit);
