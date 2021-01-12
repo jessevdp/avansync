@@ -4,7 +4,7 @@
 
 #include <vector>
 
-namespace avansync::filesystem
+namespace avansync
 {
 
   class VectorFileBuffer : public FileBuffer
@@ -21,4 +21,4 @@ namespace avansync::filesystem
     void reserve(size_t capacity) override;
   };
 
-} // namespace avansync::filesystem
+} // namespace avansync

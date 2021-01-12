@@ -1,6 +1,6 @@
 #include "VectorFileBuffer.hpp"
 
-namespace avansync::filesystem
+namespace avansync
 {
 
   VectorFileBuffer::VectorFileBuffer(size_t capacity) { _buffer.reserve(capacity); }
@@ -11,4 +11,4 @@ namespace avansync::filesystem
 
   void VectorFileBuffer::reserve(size_t capacity) { _buffer.reserve(capacity); }
 
-} // namespace avansync::filesystem
+} // namespace avansync

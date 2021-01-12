@@ -4,7 +4,7 @@
 
 #include <fstream>
 
-namespace avansync::filesystem
+namespace avansync
 {
 
   StandardFilesystem::StandardFilesystem(const std::string& base_dir) : _base_dir {base_dir}
@@ -84,4 +84,4 @@ namespace avansync::filesystem
     return full;
   }
 
-} // namespace avansync::filesystem
+} // namespace avansync

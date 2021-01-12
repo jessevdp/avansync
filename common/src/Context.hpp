@@ -2,6 +2,7 @@
 
 #include "Console.hpp"
 #include "connection/Connection.hpp"
+#include "filesystem/Filesystem.hpp"
 
 #include <asio.hpp>
 #include <iostream>
@@ -17,8 +18,9 @@ namespace avansync
 
     [[nodiscard]] virtual Connection& connection() const = 0;
     [[nodiscard]] virtual Console& console() const = 0;
+    [[nodiscard]] virtual Filesystem& filesystem() const = 0;
 
-    [[nodiscard]] virtual std::string base_dir_path() const = 0;
+    [[nodiscard]] virtual std::string base_dir_path() const = 0; // TODO: remove in favor of filesystem
   };
 
 } // namespace avansync

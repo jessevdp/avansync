@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace avansync::filesystem
+namespace avansync
 {
 
   class FilesystemException : public std::runtime_error
@@ -12,4 +12,4 @@ namespace avansync::filesystem
     explicit FilesystemException(const std::string& message);
   };
 
-} // namespace avansync::filesystem
+} // namespace avansync

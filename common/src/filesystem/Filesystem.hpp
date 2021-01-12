@@ -5,7 +5,7 @@
 
 #include <memory>
 
-namespace avansync::filesystem
+namespace avansync
 {
 
   class Filesystem
@@ -17,4 +17,4 @@ namespace avansync::filesystem
     virtual void overwrite_file(const std::string& path, FileBuffer& contents) const = 0;
   };
 
-} // namespace avansync::filesystem
+} // namespace avansync

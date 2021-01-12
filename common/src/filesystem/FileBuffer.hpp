@@ -2,7 +2,7 @@
 
 #include <cstdlib>
 
-namespace avansync::filesystem
+namespace avansync
 {
 
   class FileBuffer
@@ -15,4 +15,4 @@ namespace avansync::filesystem
     virtual void reserve(size_t capacity) = 0;
   };
 
-} // namespace avansync::filesystem
+} // namespace avansync

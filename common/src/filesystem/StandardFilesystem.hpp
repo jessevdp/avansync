@@ -3,7 +3,7 @@
 #include "Filesystem.hpp"
 #include "fs.hpp"
 
-namespace avansync::filesystem
+namespace avansync
 {
 
   class StandardFilesystem : public Filesystem
@@ -21,4 +21,4 @@ namespace avansync::filesystem
     [[nodiscard]] fs::path full_path(const std::string& relative_path) const;
   };
 
-} // namespace avansync::filesystem
+} // namespace avansync

@@ -7,6 +7,7 @@
 #include "command/PutCommand.hpp"
 #include "command/QuitCommand.hpp"
 #include "connection/AsioConnection.hpp"
+#include "filesystem/StandardFilesystem.hpp"
 #include "handler/CommandRequestHandler.hpp"
 
 #include <algorithm>
@@ -21,10 +22,10 @@ using namespace avansync::handler;
 namespace avansync::server
 {
 
-  // TODO: check if base dir even exists on startup?
   Server::Server(int port, std::string base_dir_path) :
       _base_dir_path {std::move(base_dir_path)}, _server {_io_context, tcp::endpoint(tcp::v4(), port)},
-      _handlers {std::make_unique<RequestHandlerChain>()}
+      _handlers {std::make_unique<RequestHandlerChain>()}, _filesystem {
+                                                             std::make_unique<StandardFilesystem>(base_dir_path)}
   {
     _handlers->add(std::make_unique<CommandRequestHandler>("info", std::make_unique<InfoCommand>()));
     _handlers->add(std::make_unique<CommandRequestHandler>("dir", std::make_unique<DirectoryListingCommand>()));
@@ -77,6 +78,7 @@ namespace avansync::server
 
   Connection& Server::connection() const { return *_client_connection; }
   Console& Server::console() const { return ServerConsole::instance(); }
+  Filesystem& Server::filesystem() const { return *_filesystem; }
 
   std::string Server::base_dir_path() const { return _base_dir_path; }
 

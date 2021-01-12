@@ -19,7 +19,8 @@ namespace avansync::client
     std::string _base_dir_path;
 
     std::unique_ptr<Connection> _connection {nullptr};
-    std::unique_ptr<handler::RequestHandlerChain> _handlers;
+    std::unique_ptr<handler::RequestHandlerChain> _handlers {nullptr};
+    std::unique_ptr<Filesystem> _filesystem {nullptr};
 
   public:
     explicit Client(std::string base_dir_path);
@@ -30,6 +31,7 @@ namespace avansync::client
 
     [[nodiscard]] Connection& connection() const override;
     [[nodiscard]] Console& console() const override;
+    Filesystem& filesystem() const override;
 
     [[nodiscard]] std::string base_dir_path() const override;
 

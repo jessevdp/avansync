@@ -7,6 +7,7 @@
 #include "command/PutCommand.hpp"
 #include "command/QuitCommand.hpp"
 #include "connection/AsioConnection.hpp"
+#include "filesystem/StandardFilesystem.hpp"
 #include "handler/CommandRequestHandler.hpp"
 
 #include <asio.hpp>
@@ -20,7 +21,8 @@ namespace avansync::client
 {
 
   Client::Client(std::string base_dir_path) :
-      _base_dir_path {std::move(base_dir_path)}, _handlers {std::make_unique<RequestHandlerChain>()}
+      _base_dir_path {std::move(base_dir_path)}, _handlers {std::make_unique<RequestHandlerChain>()},
+      _filesystem {std::make_unique<StandardFilesystem>(base_dir_path)}
   {
     _handlers->add(std::make_unique<CommandRequestHandler>("info", std::make_unique<InfoCommand>()));
     _handlers->add(std::make_unique<CommandRequestHandler>("dir", std::make_unique<DirectoryListingCommand>()));
@@ -79,8 +81,10 @@ namespace avansync::client
 
   Connection& Client::connection() const { return *_connection; }
   Console& Client::console() const { return ClientConsole::instance(); }
+  Filesystem& Client::filesystem() const { return *_filesystem; }
 
   std::string Client::base_dir_path() const { return _base_dir_path; }
+
 
   //#endregion
 

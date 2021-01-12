@@ -20,8 +20,8 @@ namespace avansync::server
     asio::ip::tcp::acceptor _server;
 
     std::unique_ptr<Connection> _client_connection {nullptr};
-
-    std::unique_ptr<handler::RequestHandlerChain> _handlers;
+    std::unique_ptr<handler::RequestHandlerChain> _handlers {nullptr};
+    std::unique_ptr<Filesystem> _filesystem {nullptr};
 
   public:
     explicit Server(int port, std::string base_dir_path);
@@ -32,6 +32,7 @@ namespace avansync::server
 
     [[nodiscard]] Connection& connection() const override;
     [[nodiscard]] Console& console() const override;
+    Filesystem& filesystem() const override;
 
     [[nodiscard]] std::string base_dir_path() const override;
 
