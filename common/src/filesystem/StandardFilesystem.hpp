@@ -17,6 +17,8 @@ namespace avansync
     [[nodiscard]] std::unique_ptr<FileBuffer> read_file(const std::string& relative_path) const override;
     void overwrite_file(const std::string& path, FileBuffer& contents) const override;
 
+    void remove(const std::string& relative_path) const override;
+
     void create_directories_for_file(const std::string& file_path) const override;
 
     std::vector<std::unique_ptr<DirectoryEntry>> directory_entries(const std::string& relative_path) const override;

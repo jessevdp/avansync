@@ -80,6 +80,26 @@ namespace avansync
     }
   }
 
+  void StandardFilesystem::remove(const std::string& relative_path) const
+  {
+    fs::path path = full_path(relative_path);
+    if (!fs::exists(path)) throw FilesystemException {"no such file or directory"};
+
+    try
+    {
+      fs::remove_all(path);
+    }
+    catch (const fs::filesystem_error& e)
+    {
+      if (e.code() == std::errc::permission_denied) { throw FilesystemException {"no permission"}; }
+      else
+      {
+        auto m = "problem deleting entry (path: '" + relative_path + "', error: '" + e.code().message() + "')";
+        throw FilesystemException {m};
+      }
+    }
+  }
+
   void StandardFilesystem::create_directories_for_file(const std::string& file_path) const
   {
     fs::path path = full_path(file_path);
