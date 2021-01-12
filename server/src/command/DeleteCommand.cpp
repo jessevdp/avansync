@@ -3,7 +3,8 @@
 namespace avansync::server::command
 {
 
-  void DeleteCommand::execute(Context& context) const {
+  void DeleteCommand::execute(Context& context) const
+  {
     auto path = context.connection().read_line();
     try
     {
