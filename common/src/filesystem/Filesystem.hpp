@@ -20,6 +20,8 @@ namespace avansync
 
     virtual void remove(const std::string& path) const = 0;
 
+    virtual void rename(const std::string& path, const std::string& new_name) const = 0;
+
     virtual std::vector<std::unique_ptr<DirectoryEntry>> directory_entries(const std::string& path) const = 0;
 
     virtual void create_directories_for_file(const std::string& file_path) const = 0;

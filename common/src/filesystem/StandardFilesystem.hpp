@@ -19,6 +19,8 @@ namespace avansync
 
     void remove(const std::string& relative_path) const override;
 
+    void rename(const std::string& relative_path, const std::string& new_name) const override;
+
     void create_directories_for_file(const std::string& file_path) const override;
 
     std::vector<std::unique_ptr<DirectoryEntry>> directory_entries(const std::string& relative_path) const override;
