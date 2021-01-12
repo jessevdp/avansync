@@ -32,19 +32,17 @@ namespace avansync::server::command
     }
 
     std::ofstream file;
-    file.exceptions ( std::ios::failbit | std::ios::badbit );
+    file.exceptions(std::ios::failbit | std::ios::badbit);
 
-    try {
+    try
+    {
       file.open(path, std::ios::binary | std::ios::trunc);
       file.write(file_buffer.data(), file_size);
       file.close();
     }
     catch (std::ofstream::failure& failure)
     {
-      if (failure.code() == std::errc::permission_denied)
-      {
-        context.connection().write_exception("no permission");
-      }
+      if (failure.code() == std::errc::permission_denied) { context.connection().write_exception("no permission"); }
       else if (failure.code() == std::errc::file_too_large)
       {
         context.connection().write_exception("not enough disk space");

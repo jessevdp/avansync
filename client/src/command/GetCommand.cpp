@@ -35,7 +35,8 @@ namespace avansync::client::command
     std::ofstream file;
     file.exceptions(std::ios::failbit | std::ios::badbit);
 
-    try {
+    try
+    {
       file.open(path, std::ios::binary | std::ios::trunc);
       file.write(file_buffer.data(), file_size);
       file.close();

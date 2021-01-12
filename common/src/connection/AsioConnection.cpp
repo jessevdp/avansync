@@ -25,11 +25,10 @@ namespace avansync
     return line;
   }
 
-  void AsioConnection::write_bytes(int amount, char* source_buffer) const {
-    _stream->write(source_buffer, amount);
-  }
+  void AsioConnection::write_bytes(int amount, char* source_buffer) const { _stream->write(source_buffer, amount); }
 
-  void AsioConnection::read_bytes(int amount, char* destination_buffer) const {
+  void AsioConnection::read_bytes(int amount, char* destination_buffer) const
+  {
     _stream->read(destination_buffer, amount);
   }
 
