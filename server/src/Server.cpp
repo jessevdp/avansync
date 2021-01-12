@@ -25,7 +25,7 @@ namespace avansync::server
   Server::Server(int port, std::string base_dir_path) :
       _base_dir_path {std::move(base_dir_path)}, _server {_io_context, tcp::endpoint(tcp::v4(), port)},
       _handlers {std::make_unique<RequestHandlerChain>()}, _filesystem {
-                                                             std::make_unique<StandardFilesystem>(base_dir_path)}
+                                                             std::make_unique<StandardFilesystem>(_base_dir_path)}
   {
     _handlers->add(std::make_unique<CommandRequestHandler>("info", std::make_unique<InfoCommand>()));
     _handlers->add(std::make_unique<CommandRequestHandler>("dir", std::make_unique<DirectoryListingCommand>()));
