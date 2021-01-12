@@ -2,8 +2,10 @@
 
 #include "FileBuffer.hpp"
 #include "FilesystemException.hpp"
+#include "DirectoryEntry.hpp"
 
 #include <memory>
+#include <vector>
 
 namespace avansync
 {
@@ -15,6 +17,8 @@ namespace avansync
 
     virtual std::unique_ptr<FileBuffer> read_file(const std::string& path) const = 0;
     virtual void overwrite_file(const std::string& path, FileBuffer& contents) const = 0;
+
+    virtual std::vector<std::unique_ptr<DirectoryEntry>> directory_entries(const std::string& path) const = 0;
 
     virtual void create_directories_for_file(const std::string& file_path) const = 0;
   };

@@ -1,5 +1,6 @@
 #include "StandardFilesystem.hpp"
 
+#include "StandardDirectoryEntry.hpp"
 #include "VectorFileBuffer.hpp"
 
 #include <fstream>
@@ -81,6 +82,23 @@ namespace avansync
   {
     fs::path path = full_path(file_path);
     if (!fs::exists(path.parent_path())) fs::create_directories(path.parent_path());
+  }
+
+  std::vector<std::unique_ptr<DirectoryEntry>>
+  StandardFilesystem::directory_entries(const std::string& relative_path) const
+  {
+    fs::path path = full_path(relative_path);
+
+    if (!fs::exists(path) || !fs::is_directory(path)) throw FilesystemException {"no such directory"};
+
+    std::vector<std::unique_ptr<DirectoryEntry>> entries;
+    for (const auto& entry : fs::directory_iterator(path))
+    {
+      auto entry_copy = std::make_unique<fs::directory_entry>(entry);
+      entries.push_back(std::make_unique<StandardDirectoryEntry>(std::move(entry_copy)));
+    }
+
+    return entries;
   }
 
   fs::path StandardFilesystem::full_path(const std::string& relative_path) const
