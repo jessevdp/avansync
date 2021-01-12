@@ -1,5 +1,6 @@
 #include "StandardDirectoryEntry.hpp"
 
+#include <iomanip>
 #include <sstream>
 
 namespace avansync
