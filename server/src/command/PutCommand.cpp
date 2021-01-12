@@ -20,6 +20,7 @@ namespace avansync::server::command
     file_buffer.reserve(file_size);
     context.connection().read_bytes(file_size, file_buffer.data());
 
+    // TODO: generalize and move
     // Attempt to write file to disk
 
     bool parent_dir_exists = fs::exists(path.parent_path()) && fs::is_directory(path.parent_path());
@@ -30,17 +31,30 @@ namespace avansync::server::command
       return;
     }
 
-    std::ofstream file {path, std::ofstream::binary | std::ofstream::trunc};
-    if (!file)
+    std::ofstream file;
+    file.exceptions ( std::ios::failbit | std::ios::badbit );
+
+    try {
+      file.open(path, std::ios::binary | std::ios::trunc);
+      file.write(file_buffer.data(), file_size);
+      file.close();
+    }
+    catch (std::ofstream::failure& failure)
     {
-      // TODO: error details?
-      //  - handle "no permission"
-      //  - handle "not enough disk space"
-      context.connection().write_exception("problem writing to file");
+      if (failure.code() == std::errc::permission_denied)
+      {
+        context.connection().write_exception("no permission");
+      }
+      else if (failure.code() == std::errc::file_too_large)
+      {
+        context.connection().write_exception("not enough disk space");
+      }
+      else
+      {
+        context.connection().write_exception("problem writing to file (" + failure.code().message() + ")");
+      }
       return;
     }
-    file.write(file_buffer.data(), file_size);
-    file.close();
 
     context.connection().write_line("OK");
   }
