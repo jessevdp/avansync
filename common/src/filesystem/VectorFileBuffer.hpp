@@ -14,11 +14,11 @@ namespace avansync
 
   public:
     VectorFileBuffer() = default;
-    explicit VectorFileBuffer(size_t capacity);
+    explicit VectorFileBuffer(int capacity);
 
     char* data() override;
     [[nodiscard]] size_t size() const override;
-    void reserve(size_t capacity) override;
+    void reserve(int capacity) override;
   };
 
 } // namespace avansync
