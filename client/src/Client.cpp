@@ -19,8 +19,8 @@ using namespace avansync::handler;
 namespace avansync::client
 {
 
-  Client::Client(std::string base_dir_path) :
-      _base_dir_path {std::move(base_dir_path)}, _handlers {std::make_unique<RequestHandlerChain>()}
+  Client::Client(std::string base_dir_path)
+      : _base_dir_path {std::move(base_dir_path)}, _handlers {std::make_unique<RequestHandlerChain>()}
   {
     _handlers->add(std::make_unique<CommandRequestHandler>("info", std::make_unique<InfoCommand>()));
     _handlers->add(std::make_unique<CommandRequestHandler>("dir", std::make_unique<DirectoryListingCommand>()));
