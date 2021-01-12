@@ -1,6 +1,7 @@
 #include "Server.hpp"
 
 #include "ServerConsole.hpp"
+#include "command/DeleteCommand.hpp"
 #include "command/DirectoryListingCommand.hpp"
 #include "command/GetCommand.hpp"
 #include "command/InfoCommand.hpp"
@@ -31,6 +32,7 @@ namespace avansync::server
     _handlers->add(std::make_unique<CommandRequestHandler>("dir", std::make_unique<DirectoryListingCommand>()));
     _handlers->add(std::make_unique<CommandRequestHandler>("get", std::make_unique<GetCommand>()));
     _handlers->add(std::make_unique<CommandRequestHandler>("put", std::make_unique<PutCommand>()));
+    _handlers->add(std::make_unique<CommandRequestHandler>("del", std::make_unique<DeleteCommand>()));
     _handlers->add(std::make_unique<CommandRequestHandler>("quit", std::make_unique<QuitCommand>()));
   }
 
