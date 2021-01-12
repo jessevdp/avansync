@@ -14,17 +14,16 @@ namespace avansync::server
   {
   private:
     bool _running {false};
-    std::string _base_dir_path;
 
     asio::io_context _io_context;
     asio::ip::tcp::acceptor _server;
 
     std::unique_ptr<Connection> _client_connection {nullptr};
-
-    std::unique_ptr<handler::RequestHandlerChain> _handlers;
+    std::unique_ptr<handler::RequestHandlerChain> _handlers {nullptr};
+    std::unique_ptr<Filesystem> _filesystem {nullptr};
 
   public:
-    explicit Server(int port, std::string base_dir_path);
+    explicit Server(int port, const std::string& base_dir_path);
     void start();
     void stop();
 
@@ -32,8 +31,7 @@ namespace avansync::server
 
     [[nodiscard]] Connection& connection() const override;
     [[nodiscard]] Console& console() const override;
-
-    [[nodiscard]] std::string base_dir_path() const override;
+    [[nodiscard]] Filesystem& filesystem() const override;
 
     //#endregion
 

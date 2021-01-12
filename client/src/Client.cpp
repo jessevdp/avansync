@@ -7,6 +7,7 @@
 #include "command/PutCommand.hpp"
 #include "command/QuitCommand.hpp"
 #include "connection/AsioConnection.hpp"
+#include "filesystem/StandardFilesystem.hpp"
 #include "handler/CommandRequestHandler.hpp"
 
 #include <asio.hpp>
@@ -19,8 +20,9 @@ using namespace avansync::handler;
 namespace avansync::client
 {
 
-  Client::Client(std::string base_dir_path)
-      : _base_dir_path {std::move(base_dir_path)}, _handlers {std::make_unique<RequestHandlerChain>()}
+  Client::Client(const std::string& base_dir_path)
+      : _handlers {std::make_unique<RequestHandlerChain>()},
+        _filesystem {std::make_unique<StandardFilesystem>(base_dir_path)}
   {
     _handlers->add(std::make_unique<CommandRequestHandler>("info", std::make_unique<InfoCommand>()));
     _handlers->add(std::make_unique<CommandRequestHandler>("dir", std::make_unique<DirectoryListingCommand>()));
@@ -48,7 +50,7 @@ namespace avansync::client
       bool handled = _handlers->handle(request, *this);
       if (!handled) { console().write_line("Error: unknown command: '" + request + "'"); }
     }
-    catch (const std::runtime_error& e)
+    catch (const std::exception& e)
     {
       std::string message = "Error: ";
       message += e.what();
@@ -79,8 +81,7 @@ namespace avansync::client
 
   Connection& Client::connection() const { return *_connection; }
   Console& Client::console() const { return ClientConsole::instance(); }
-
-  std::string Client::base_dir_path() const { return _base_dir_path; }
+  Filesystem& Client::filesystem() const { return *_filesystem; }
 
   //#endregion
 
