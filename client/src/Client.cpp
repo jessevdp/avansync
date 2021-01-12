@@ -2,7 +2,9 @@
 
 #include "ClientConsole.hpp"
 #include "command/DirectoryListingCommand.hpp"
+#include "command/GetCommand.hpp"
 #include "command/InfoCommand.hpp"
+#include "command/PutCommand.hpp"
 #include "command/QuitCommand.hpp"
 #include "connection/AsioConnection.hpp"
 #include "handler/CommandRequestHandler.hpp"
@@ -22,6 +24,8 @@ namespace avansync::client
   {
     _handlers->add(std::make_unique<CommandRequestHandler>("info", std::make_unique<InfoCommand>()));
     _handlers->add(std::make_unique<CommandRequestHandler>("dir", std::make_unique<DirectoryListingCommand>()));
+    _handlers->add(std::make_unique<CommandRequestHandler>("get", std::make_unique<GetCommand>()));
+    _handlers->add(std::make_unique<CommandRequestHandler>("put", std::make_unique<PutCommand>()));
     _handlers->add(std::make_unique<CommandRequestHandler>("quit", std::make_unique<QuitCommand>()));
   }
 

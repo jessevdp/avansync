@@ -17,6 +17,9 @@ namespace avansync
 
     [[nodiscard]] virtual std::string read_line() const = 0;
 
+    virtual void write_bytes(int amount, char* source_buffer) const = 0;
+    virtual void read_bytes(int amount, char* destination_buffer) const = 0;
+
     virtual void close() = 0;
 
     [[nodiscard]] virtual bool is_open() const = 0;

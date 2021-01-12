@@ -25,6 +25,13 @@ namespace avansync
     return line;
   }
 
+  void AsioConnection::write_bytes(int amount, char* source_buffer) const { _stream->write(source_buffer, amount); }
+
+  void AsioConnection::read_bytes(int amount, char* destination_buffer) const
+  {
+    _stream->read(destination_buffer, amount);
+  }
+
   bool AsioConnection::is_exception(const std::string& line) const { return line.rfind(EXCEPTION_PREFIX, 0) == 0; }
 
   std::string AsioConnection::retrieve_exception_message(std::string line) const

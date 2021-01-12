@@ -34,6 +34,9 @@ namespace avansync
      */
     [[nodiscard]] std::string read_line() const override;
 
+    void write_bytes(int amount, char* source_buffer) const override;
+    void read_bytes(int amount, char* destination_buffer) const override;
+
     void close() override;
 
     [[nodiscard]] bool is_open() const override;
@@ -43,7 +46,7 @@ namespace avansync
 
   private:
     [[nodiscard]] bool is_exception(const std::string& line) const;
-    std::string retrieve_exception_message(std::string line) const;
+    [[nodiscard]] std::string retrieve_exception_message(std::string line) const;
   };
 
 } // namespace avansync
