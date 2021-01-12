@@ -1,8 +1,8 @@
 #pragma once
 
+#include "DirectoryEntry.hpp"
 #include "FileBuffer.hpp"
 #include "FilesystemException.hpp"
-#include "DirectoryEntry.hpp"
 
 #include <memory>
 #include <vector>
