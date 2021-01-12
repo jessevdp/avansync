@@ -52,9 +52,7 @@ namespace avansync
     auto path = full_path(relative_path);
 
     if (!fs::exists(path.parent_path()) || !fs::is_directory(path.parent_path()))
-    {
-      throw FilesystemException {"invalid path"};
-    }
+    { throw FilesystemException {"invalid path"}; }
 
     std::ofstream file;
     file.exceptions(std::ios::failbit | std::ios::badbit);
@@ -75,6 +73,26 @@ namespace avansync
       else
       {
         auto m = "problem overwriting file (file: '" + relative_path + "', error: '" + failure.code().message() + "')";
+        throw FilesystemException {m};
+      }
+    }
+  }
+
+  void StandardFilesystem::remove(const std::string& relative_path) const
+  {
+    fs::path path = full_path(relative_path);
+    if (!fs::exists(path)) throw FilesystemException {"no such file or directory"};
+
+    try
+    {
+      fs::remove_all(path);
+    }
+    catch (const fs::filesystem_error& e)
+    {
+      if (e.code() == std::errc::permission_denied) { throw FilesystemException {"no permission"}; }
+      else
+      {
+        auto m = "problem deleting entry (path: '" + relative_path + "', error: '" + e.code().message() + "')";
         throw FilesystemException {m};
       }
     }
