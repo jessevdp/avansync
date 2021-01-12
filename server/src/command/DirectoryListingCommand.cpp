@@ -30,7 +30,16 @@ namespace avansync::server::command
   {
     auto dirname = context.connection().read_line();
 
-    auto entries = context.filesystem().directory_entries(dirname);
+    std::vector<std::unique_ptr<DirectoryEntry>> entries;
+    try
+    {
+      entries = context.filesystem().directory_entries(dirname);
+    }
+    catch (const FilesystemException& e)
+    {
+      context.connection().write_exception(e);
+      return;
+    }
 
     context.connection().write_line(std::to_string(entries.size()));
 
