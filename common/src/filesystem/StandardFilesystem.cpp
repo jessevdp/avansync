@@ -80,7 +80,7 @@ namespace avansync
   void StandardFilesystem::create_directories_for_file(const std::string& file_path) const
   {
     fs::path path = full_path(file_path);
-    if (!fs::exists(path.parent_path())) fs::create_directories(path);
+    if (!fs::exists(path.parent_path())) fs::create_directories(path.parent_path());
   }
 
   fs::path StandardFilesystem::full_path(const std::string& relative_path) const
