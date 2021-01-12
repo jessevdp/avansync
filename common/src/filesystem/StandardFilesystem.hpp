@@ -15,7 +15,8 @@ namespace avansync
     explicit StandardFilesystem(const std::string& base_dir);
 
     [[nodiscard]] std::unique_ptr<FileBuffer> read_file(const std::string& relative_path) const override;
-    void overwrite_file(const std::string& relative_path, FileBuffer& contents) const override;
+    void overwrite_file(const std::string& path, FileBuffer& contents) const override;
+    void create_directories_for_file(const std::string& file_path) const override;
 
   private:
     [[nodiscard]] fs::path full_path(const std::string& relative_path) const;

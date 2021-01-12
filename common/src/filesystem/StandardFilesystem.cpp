@@ -50,7 +50,7 @@ namespace avansync
   {
     auto path = full_path(relative_path);
 
-    if (!fs::exists(path.parent_path()) && !fs::is_directory(path.parent_path()))
+    if (!fs::exists(path.parent_path()) || !fs::is_directory(path.parent_path()))
     { throw FilesystemException {"invalid path"}; }
 
     std::ofstream file;
@@ -77,10 +77,16 @@ namespace avansync
     }
   }
 
+  void StandardFilesystem::create_directories_for_file(const std::string& file_path) const
+  {
+    fs::path path = full_path(file_path);
+    if (!fs::exists(path.parent_path())) fs::create_directories(path);
+  }
+
   fs::path StandardFilesystem::full_path(const std::string& relative_path) const
   {
     fs::path full {_base_dir};
-    full.append(relative_path);
+    full.append(relative_path); // TODO: this exposes the entire file system...
     return full;
   }
 
