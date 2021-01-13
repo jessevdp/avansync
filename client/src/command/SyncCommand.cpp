@@ -93,7 +93,9 @@ namespace avansync::client::command
         auto local_entry = local_entry_it->get();
 
         if (local_entry->formatted_modification_timestamp() != formatted_timestamp)
-        { put(context, local_entry->relative_path()); }
+        {
+          put(context, local_entry->relative_path());
+        }
 
         local_entries.erase(local_entry_it);
       }
