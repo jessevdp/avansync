@@ -50,29 +50,17 @@ namespace avansync::client::command
 
     // Compare files in remote dir to local dir
 
-    int remote_entry_count {0};
+    std::vector<std::string> remote_entry_lines;
 
     try
     {
-      // TODO: this is duplicate from DirectoryListingCommand
-      context.connection().write_line("dir");
-      context.connection().write_line(path);
-      remote_entry_count = std::stoi(context.connection().read_line());
+      remote_entry_lines = fetch_directory_listing(context, path);
     }
     catch (std::exception& e)
     {
       // the remote dir does not exist, create it
       construct_remote_directory_recursively(context, path);
     }
-
-    std::vector<std::string> remote_entry_lines;
-    remote_entry_lines.reserve(remote_entry_count);
-
-    for (int i = 0; i < remote_entry_count; ++i)
-    {
-      remote_entry_lines.push_back(context.connection().read_line());
-    }
-
 
     for (const auto& line : remote_entry_lines)
     {
@@ -90,13 +78,7 @@ namespace avansync::client::command
         if (local_dir_it == local_dirs.end())
         {
           auto relative_path = context.filesystem().append_path(path, name);
-
-          // TODO: this is duplicate from DeleteCommand
-          context.connection().write_line("del");
-          context.connection().write_line(relative_path);
-
-          // read response from server (prevent blocking)
-          auto response = context.connection().read_line();
+          remove(context, relative_path);
         }
 
         continue;
@@ -111,34 +93,15 @@ namespace avansync::client::command
         auto local_entry = local_entry_it->get();
 
         if (local_entry->formatted_modification_timestamp() != formatted_timestamp)
-        {
-          // TODO: this is duplicate from PutCommand...
-          // Read file from disk
-          auto file = context.filesystem().read_file(local_entry->relative_path());
+        { put(context, local_entry->relative_path()); }
 
-          // Communicate details of request to server
-          context.connection().write_line("put");
-          context.connection().write_line(local_entry->relative_path());
-          context.connection().write_line(std::to_string(file->size()));
-          // Write file contents to server
-          context.connection().write_bytes(file->size(), file->data());
-
-          // read response from server (prevent blocking)
-          auto response = context.connection().read_line();
-        }
         local_entries.erase(local_entry_it);
       }
       else
       {
         // Entry does not exist locally -> delete on remote
         auto relative_path = context.filesystem().append_path(path, name);
-
-        // TODO: this is duplicate from DeleteCommand
-        context.connection().write_line("del");
-        context.connection().write_line(relative_path);
-
-        // read response from server (prevent blocking)
-        auto response = context.connection().read_line();
+        remove(context, relative_path);
       }
     }
 
@@ -146,21 +109,11 @@ namespace avansync::client::command
     // (the ones we haven't encountered when comparing to the remote dir don't exist there and should be uploaded)
     for (const auto& entry : local_entries)
     {
-      // TODO: this is duplicate from PutCommand...
-      // Read file from disk
-      auto file = context.filesystem().read_file(entry->relative_path());
-
-      // Communicate details of request to server
-      context.connection().write_line("put");
-      context.connection().write_line(entry->relative_path());
-      context.connection().write_line(std::to_string(file->size()));
-      // Write file contents to server
-      context.connection().write_bytes(file->size(), file->data());
-
-      // read response from server (prevent blocking)
-      auto response = context.connection().read_line();
+      put(context, entry->relative_path());
     }
   }
+
+  //#region helpers
 
   void SyncCommand::construct_remote_directory_recursively(Context& context, const std::string& path) const
   {
@@ -169,11 +122,8 @@ namespace avansync::client::command
 
     try
     {
+      create_directory(context, parent_path, dir_name);
       // TODO: this is duplicate from CreateDirectoryCommand
-      context.connection().write_line("mkdir");
-      context.connection().write_line(parent_path);
-      context.connection().write_line(dir_name);
-      auto response = context.connection().read_line(); // throws when problem on remote
     }
     catch (const std::exception& e)
     {
@@ -183,5 +133,57 @@ namespace avansync::client::command
       construct_remote_directory_recursively(context, path);
     }
   }
+
+  void SyncCommand::put(Context& context, const std::string& relative_path)
+  {
+    // Read file from disk
+    auto file = context.filesystem().read_file(relative_path);
+
+    // Communicate details of request to server
+    context.connection().write_line("put");
+    context.connection().write_line(relative_path);
+    context.connection().write_line(std::to_string(file->size()));
+    // Write file contents to server
+    context.connection().write_bytes(file->size(), file->data());
+
+    // read response from server (prevent blocking)
+    auto response = context.connection().read_line();
+  }
+
+  void SyncCommand::remove(Context& context, const std::string& relative_path)
+  {
+    context.connection().write_line("del");
+    context.connection().write_line(relative_path);
+
+    // read response from server (prevent blocking)
+    auto response = context.connection().read_line();
+  }
+
+  std::vector<std::string> SyncCommand::fetch_directory_listing(Context& context, const std::string& relative_path)
+  {
+    context.connection().write_line("dir");
+    context.connection().write_line(relative_path);
+    int remote_entry_count = std::stoi(context.connection().read_line());
+
+    std::vector<std::string> remote_entry_lines;
+    remote_entry_lines.reserve(remote_entry_count);
+
+    for (int i = 0; i < remote_entry_count; ++i)
+    {
+      remote_entry_lines.push_back(context.connection().read_line());
+    }
+
+    return remote_entry_lines;
+  }
+
+  void SyncCommand::create_directory(Context& context, const std::string& parent_path, const std::string& dir_name)
+  {
+    context.connection().write_line("mkdir");
+    context.connection().write_line(parent_path);
+    context.connection().write_line(dir_name);
+    auto response = context.connection().read_line(); // throws when problem on remote
+  }
+
+  //#endregion
 
 } // namespace avansync::client::command
