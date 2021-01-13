@@ -8,6 +8,7 @@
 #include "command/InfoCommand.hpp"
 #include "command/PutCommand.hpp"
 #include "command/QuitCommand.hpp"
+#include "command/SyncCommand.hpp"
 #include "command/RenameCommand.hpp"
 #include "connection/AsioConnection.hpp"
 #include "filesystem/StandardFilesystem.hpp"
@@ -34,6 +35,7 @@ namespace avansync::client
     _handlers->add(std::make_unique<CommandRequestHandler>("ren", std::make_unique<RenameCommand>()));
     _handlers->add(std::make_unique<CommandRequestHandler>("del", std::make_unique<DeleteCommand>()));
     _handlers->add(std::make_unique<CommandRequestHandler>("mkdir", std::make_unique<CreateDirectoryCommand>()));
+    _handlers->add(std::make_unique<CommandRequestHandler>("sync", std::make_unique<SyncCommand>()));
     _handlers->add(std::make_unique<CommandRequestHandler>("quit", std::make_unique<QuitCommand>()));
   }
 

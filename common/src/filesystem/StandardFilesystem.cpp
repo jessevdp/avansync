@@ -130,7 +130,7 @@ namespace avansync
     for (const auto& entry : fs::directory_iterator(path))
     {
       auto entry_copy = std::make_unique<fs::directory_entry>(entry);
-      entries.push_back(std::make_unique<StandardDirectoryEntry>(std::move(entry_copy)));
+      entries.push_back(std::make_unique<StandardDirectoryEntry>(std::move(entry_copy), _base_dir));
     }
 
     return entries;
@@ -155,5 +155,12 @@ namespace avansync
       throw FilesystemException {"unexpected filesystem error: '" + error.message() + "'"};
     }
   }
+
+  std::string StandardFilesystem::parent_path(const std::string& path) const
+  {
+    return fs::path(path).parent_path().string();
+  }
+
+  std::string StandardFilesystem::filename(const std::string& path) const { return fs::path(path).filename().string(); }
 
 } // namespace avansync

@@ -27,6 +27,9 @@ namespace avansync
 
     std::vector<std::unique_ptr<DirectoryEntry>> directory_entries(const std::string& relative_path) const override;
 
+    std::string parent_path(const std::string& path) const override;
+    std::string filename(const std::string& path) const override;
+
   private:
     [[nodiscard]] fs::path full_path(const std::string& relative_path) const;
 
