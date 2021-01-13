@@ -47,9 +47,7 @@ namespace avansync
     auto path = full_path(relative_path);
 
     if (!fs::exists(path.parent_path()) || !fs::is_directory(path.parent_path()))
-    {
-      throw FilesystemException {"invalid path"};
-    }
+    { throw FilesystemException {"invalid path"}; }
 
     std::ofstream file;
     file.exceptions(std::ios::failbit | std::ios::badbit);
@@ -91,6 +89,23 @@ namespace avansync
     try
     {
       fs::rename(path, new_path);
+    }
+    catch (const fs::filesystem_error& e)
+    {
+      handle_error(e.code());
+    }
+  }
+
+  void StandardFilesystem::create_directory(const std::string& parent_dir, const std::string& dir_name) const
+  {
+    fs::path path = full_path(parent_dir);
+    fs::path new_dir_path = path / dir_name;
+
+    if (!fs::exists(path) || !fs::is_directory(path)) throw FilesystemException {"no such directory"};
+
+    try
+    {
+      fs::create_directory(new_dir_path);
     }
     catch (const fs::filesystem_error& e)
     {
