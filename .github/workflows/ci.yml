@@ -23,6 +23,12 @@ jobs:
       - name: build
         run: cmake --build build/ --target server
 
+      - name: build tests
+        run: cmake --build build/ --target server-tests
+
+      - name: run tests
+        run: ./build/server/tests/server-tests
+
   client:
     name: Client
     runs-on: ubuntu-latest
