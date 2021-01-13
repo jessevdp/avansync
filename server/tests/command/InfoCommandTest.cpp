@@ -1,7 +1,7 @@
+#include "command/InfoCommand.hpp"
+
 #include <catch.hpp>
 #include <fakeit.hpp>
-
-#include "command/InfoCommand.hpp"
 
 using namespace avansync;
 using namespace avansync::server;

@@ -19,9 +19,7 @@ TEST_CASE("DeleteCommand")
 
   Mock<Filesystem> mock_filesystem;
   std::string passed_path;
-  When(Method(mock_filesystem, remove)).AlwaysDo([&](const std::string& path) {
-    passed_path = path;
-  });
+  When(Method(mock_filesystem, remove)).AlwaysDo([&](const std::string& path) { passed_path = path; });
 
   Mock<Context> mock_context;
   When(Method(mock_context, connection)).AlwaysReturn(mock_connection.get());
