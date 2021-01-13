@@ -34,7 +34,7 @@ namespace std::experimental::filesystem
 
     return ret;
   }
-}
+} // namespace std::experimental::filesystem
 
 #else
 #include <filesystem>
