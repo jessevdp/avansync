@@ -4,7 +4,7 @@
 #include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;
 
-fs::path fs::relative(const fs::path& path, const fs::path& base_path)
+fs::path std::experimental::filesystem::relative(const fs::path& path, const fs::path& base_path)
 {
   // 1. convert p and base to absolute paths
   auto p = fs::absolute(path);
