@@ -65,9 +65,18 @@ namespace avansync::client::command
       construct_remote_directory_recursively(context, path);
     }
 
+    std::vector<std::string> remote_entry_lines;
+    remote_entry_lines.reserve(remote_entry_count);
+
     for (int i = 0; i < remote_entry_count; ++i)
     {
-      auto remote_entry_line = split(context.connection().read_line(), '|');
+      remote_entry_lines.push_back(context.connection().read_line());
+    }
+
+
+    for (const auto& line : remote_entry_lines)
+    {
+      auto remote_entry_line = split(line, '|');
       auto type = remote_entry_line[0];
       auto name = remote_entry_line[1];
       auto formatted_timestamp = remote_entry_line[2];
@@ -160,6 +169,7 @@ namespace avansync::client::command
 
     try
     {
+      // TODO: this is duplicate from CreateDirectoryCommand
       context.connection().write_line("mkdir");
       context.connection().write_line(parent_path);
       context.connection().write_line(dir_name);
