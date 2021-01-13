@@ -1,6 +1,7 @@
 #include "Client.hpp"
 
 #include "ClientConsole.hpp"
+#include "command/CreateDirectoryCommand.hpp"
 #include "command/DeleteCommand.hpp"
 #include "command/DirectoryListingCommand.hpp"
 #include "command/GetCommand.hpp"
@@ -32,6 +33,7 @@ namespace avansync::client
     _handlers->add(std::make_unique<CommandRequestHandler>("put", std::make_unique<PutCommand>()));
     _handlers->add(std::make_unique<CommandRequestHandler>("ren", std::make_unique<RenameCommand>()));
     _handlers->add(std::make_unique<CommandRequestHandler>("del", std::make_unique<DeleteCommand>()));
+    _handlers->add(std::make_unique<CommandRequestHandler>("mkdir", std::make_unique<CreateDirectoryCommand>()));
     _handlers->add(std::make_unique<CommandRequestHandler>("quit", std::make_unique<QuitCommand>()));
   }
 
