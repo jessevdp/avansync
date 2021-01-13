@@ -48,7 +48,7 @@ namespace avansync::server::command
       std::stringstream file_info;
       file_info << file_type(*entry);
       file_info << "|" << entry->name();
-      file_info << "|" << entry->formatted_modification_timestamp(TIMESTAMP_FORMAT);
+      file_info << "|" << entry->formatted_modification_timestamp();
       file_info << "|" << entry->file_size();
 
       context.connection().write_line(file_info.str());

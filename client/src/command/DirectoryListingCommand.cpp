@@ -5,11 +5,10 @@ namespace avansync::client::command
 
   void DirectoryListingCommand::execute(Context& context) const
   {
-    context.connection().write_line("dir");
-
     context.console().write("sub-directory: ");
     auto dir = context.console().read_line();
 
+    context.connection().write_line("dir");
     context.connection().write_line(dir);
 
     int entry_count = std::stoi(context.connection().read_line());
