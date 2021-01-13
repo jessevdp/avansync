@@ -21,7 +21,7 @@ namespace avansync
     explicit AsioConnection(std::unique_ptr<asio::ip::tcp::iostream> stream);
 
     void write_line(const std::string& data) const override;
-    void write_exception(const std::string& message) const override;
+    void write_error(const std::string& message) const override;
     void write_exception(const std::exception& exception) const override;
 
     /**
