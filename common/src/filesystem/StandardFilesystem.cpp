@@ -162,5 +162,9 @@ namespace avansync
   }
 
   std::string StandardFilesystem::filename(const std::string& path) const { return fs::path(path).filename().string(); }
+  std::string StandardFilesystem::append_path(const std::string& parent_path, const std::string& relative_path) const
+  {
+    return fs::path(parent_path).append(relative_path).string();
+  }
 
 } // namespace avansync

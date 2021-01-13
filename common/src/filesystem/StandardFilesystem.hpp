@@ -29,6 +29,7 @@ namespace avansync
 
     std::string parent_path(const std::string& path) const override;
     std::string filename(const std::string& path) const override;
+    std::string append_path(const std::string& parent_path, const std::string& relative_path) const override;
 
   private:
     [[nodiscard]] fs::path full_path(const std::string& relative_path) const;

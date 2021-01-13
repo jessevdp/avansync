@@ -31,6 +31,7 @@ namespace avansync::client::command
   void SyncCommand::sync_directory_recursively(Context& context, const std::string& path) const
   {
     auto local_entries = context.filesystem().directory_entries(path);
+    std::vector<std::unique_ptr<DirectoryEntry>> local_dirs;
 
     // Handle directories first. Making sure to remove them from the "to be handled" list of entries
     auto it = local_entries.begin();
@@ -40,6 +41,7 @@ namespace avansync::client::command
       if (entry->is_directory())
       {
         sync_directory_recursively(context, entry->relative_path());
+        local_dirs.push_back(std::move(entry));
         it = local_entries.erase(it);
         continue;
       }
@@ -70,15 +72,35 @@ namespace avansync::client::command
       auto name = remote_entry_line[1];
       auto formatted_timestamp = remote_entry_line[2];
 
-      // skip dirs
-      if (type == "D") continue;
-
-      auto local_entry_it =
-        std::find_if(local_entries.begin(), local_entries.end(), [&name](const auto& local) { local->name() == name; });
-      auto local_entry = local_entry_it->get();
-
-      if (local_entry)
+      // Delete remote dirs that don't exist anymore
+      if (type == "D")
       {
+        auto local_dir_it = std::find_if(local_dirs.begin(), local_dirs.end(),
+                                         [&name](const auto& local) { return local->name() == name; });
+
+        if (local_dir_it == local_dirs.end())
+        {
+          auto relative_path = context.filesystem().append_path(path, name);
+
+          // TODO: this is duplicate from DeleteCommand
+          context.connection().write_line("del");
+          context.connection().write_line(relative_path);
+
+          // read response from server (prevent blocking)
+          auto response = context.connection().read_line();
+        }
+
+        continue;
+      }
+
+      auto local_entry_it = std::find_if(local_entries.begin(), local_entries.end(),
+                                         [&name](const auto& local) { return local->name() == name; });
+
+      // If the entry exists locally compare timestamps and PUT if required
+      if (local_entry_it != local_entries.end())
+      {
+        auto local_entry = local_entry_it->get();
+
         if (local_entry->formatted_modification_timestamp() != formatted_timestamp)
         {
           // TODO: this is duplicate from PutCommand...
@@ -100,9 +122,11 @@ namespace avansync::client::command
       else
       {
         // Entry does not exist locally -> delete on remote
+        auto relative_path = context.filesystem().append_path(path, name);
+
         // TODO: this is duplicate from DeleteCommand
         context.connection().write_line("del");
-        context.connection().write_line(path);
+        context.connection().write_line(relative_path);
 
         // read response from server (prevent blocking)
         auto response = context.connection().read_line();

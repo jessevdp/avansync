@@ -29,6 +29,7 @@ namespace avansync
 
     virtual std::string parent_path(const std::string& path) const = 0;
     virtual std::string filename(const std::string& path) const = 0;
+    virtual std::string append_path(const std::string& parent_path, const std::string& relative_path) const = 0;
   };
 
 } // namespace avansync
